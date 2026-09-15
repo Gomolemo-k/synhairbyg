@@ -38,7 +38,7 @@ export const collections: Collection[] = [
     tagline: "The crown jewels",
     description:
       "Hand-finished human blend wigs with soft lace and a natural scalp line. The everyday luxury our babes swear by.",
-    gradient: ["#5b2a44", "#a94e72"],
+    gradient: ["#5e2433", "#9d6f7c"],
   },
   {
     slug: "synthetic",
@@ -46,7 +46,7 @@ export const collections: Collection[] = [
     tagline: "Flawless on a budget",
     description:
       "Silky, pre-styled synthetics that hold their shape from day one. Affordable, low-maintenance, and seriously pretty.",
-    gradient: ["#f4dde2", "#ffffff"],
+    gradient: ["#f0d3dd", "#ffffff"],
   },
   {
     slug: "bridal-occasion",
@@ -54,7 +54,7 @@ export const collections: Collection[] = [
     tagline: "For the days you shine",
     description:
       "Soft waves and romantic lengths made for weddings, parties, and every moment you want to feel unforgettable.",
-    gradient: ["#c9a46c", "#f4dde2"],
+    gradient: ["#c9a46c", "#f0d3dd"],
   },
 ];
 
@@ -78,7 +78,7 @@ export const products: Product[] = [
     featured: true,
     badge: "Best Seller",
     collection: "signature-blend",
-    gradient: ["#5b2a44", "#a94e72"],
+    gradient: ["#5e2433", "#9d6f7c"],
   },
   {
     id: "p02",
@@ -99,7 +99,7 @@ export const products: Product[] = [
     featured: true,
     badge: "Fan Favourite",
     collection: "signature-blend",
-    gradient: ["#a94e72", "#5b2a44"],
+    gradient: ["#9d6f7c", "#5e2433"],
   },
   {
     id: "p03",
@@ -117,7 +117,7 @@ export const products: Product[] = [
     color: "Jet Black",
     stock: 5,
     collection: "signature-blend",
-    gradient: ["#5b2a44", "#211a1c"],
+    gradient: ["#5e2433", "#211a1c"],
   },
   {
     id: "p04",
@@ -136,7 +136,7 @@ export const products: Product[] = [
     stock: 4,
     badge: "Premium",
     collection: "signature-blend",
-    gradient: ["#211a1c", "#5b2a44"],
+    gradient: ["#211a1c", "#5e2433"],
   },
   {
     id: "p05",
@@ -156,7 +156,7 @@ export const products: Product[] = [
     stock: 3,
     badge: "Trending",
     collection: "signature-blend",
-    gradient: ["#c9a46c", "#a94e72"],
+    gradient: ["#c9a46c", "#9d6f7c"],
   },
   {
     id: "p06",
@@ -177,7 +177,7 @@ export const products: Product[] = [
     featured: true,
     badge: "Value Pick",
     collection: "signature-blend",
-    gradient: ["#f4dde2", "#a94e72"],
+    gradient: ["#f0d3dd", "#9d6f7c"],
   },
   {
     id: "p07",
@@ -195,7 +195,7 @@ export const products: Product[] = [
     color: "Natural Black",
     stock: 7,
     collection: "bridal-occasion",
-    gradient: ["#a94e72", "#c9a46c"],
+    gradient: ["#9d6f7c", "#c9a46c"],
   },
   {
     id: "p08",
@@ -215,7 +215,7 @@ export const products: Product[] = [
     featured: true,
     badge: "Bridal Pick",
     collection: "bridal-occasion",
-    gradient: ["#c9a46c", "#f4dde2"],
+    gradient: ["#c9a46c", "#f0d3dd"],
   },
   {
     id: "p09",
@@ -234,7 +234,7 @@ export const products: Product[] = [
     color: "Natural Black",
     stock: 4,
     collection: "bridal-occasion",
-    gradient: ["#a94e72", "#5b2a44"],
+    gradient: ["#9d6f7c", "#5e2433"],
   },
   {
     id: "p10",
@@ -254,7 +254,7 @@ export const products: Product[] = [
     stock: 15,
     badge: "New",
     collection: "synthetic",
-    gradient: ["#f4dde2", "#ffffff"],
+    gradient: ["#f0d3dd", "#ffffff"],
   },
   {
     id: "p11",
@@ -275,7 +275,7 @@ export const products: Product[] = [
     featured: true,
     badge: "Best Seller",
     collection: "synthetic",
-    gradient: ["#a94e72", "#5b2a44"],
+    gradient: ["#9d6f7c", "#5e2433"],
   },
   {
     id: "p12",
@@ -293,7 +293,7 @@ export const products: Product[] = [
     color: "Natural Black",
     stock: 12,
     collection: "synthetic",
-    gradient: ["#f4dde2", "#c9a46c"],
+    gradient: ["#f0d3dd", "#c9a46c"],
   },
   {
     id: "p13",
@@ -313,7 +313,7 @@ export const products: Product[] = [
     stock: 9,
     badge: "Limited Colour",
     collection: "synthetic",
-    gradient: ["#c9a46c", "#f4dde2"],
+    gradient: ["#c9a46c", "#f0d3dd"],
   },
   {
     id: "p14",
@@ -332,7 +332,7 @@ export const products: Product[] = [
     stock: 8,
     badge: "New",
     collection: "synthetic",
-    gradient: ["#211a1c", "#5b2a44"],
+    gradient: ["#211a1c", "#5e2433"],
   },
 ];
 

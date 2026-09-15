@@ -57,8 +57,8 @@ export default function AboutPage() {
         </div>
         <div className="order-1 lg:order-2">
           <ProductArt
-            from="#5b2a44"
-            to="#a94e72"
+            from="#5e2433"
+            to="#9d6f7c"
             name="SynHair by G"
             className="aspect-[4/5] rounded-3xl shadow-xl shadow-plum/10"
           />

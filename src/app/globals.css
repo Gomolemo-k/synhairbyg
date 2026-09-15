@@ -3,9 +3,9 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-plum: #5b2a44;
-  --color-rose: #a94e72;
-  --color-blush: #f4dde2;
+  --color-plum: #5e2433;
+  --color-rose: #9d6f7c;
+  --color-blush: #f0d3dd;
   --color-warmwhite: #fff9f7;
   --color-gold: #c9a46c;
   --color-charcoal: #211a1c;
@@ -29,6 +29,6 @@ body {
 }
 
 ::selection {
-  background: #5b2a44;
+  background: #5e2433;
   color: #fff9f7;
 }
