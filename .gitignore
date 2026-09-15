@@ -31,9 +31,8 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # env files (can opt-in for committing if needed)
-.env*
-!.env.example
-
+.env
+.env.example
 # local order data (replace with a database before going live)
 /.data/
 
@@ -43,3 +42,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+.gitignore
