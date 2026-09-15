@@ -59,7 +59,7 @@ export default async function ShopPage(
         <p className="text-xs font-bold uppercase tracking-[0.25em] text-gold">
           The full edit
         </p>
-        <h1 className="mt-2 font-display text-5xl text-maroon">Shop Wigs</h1>
+        <h1 className="mt-2 font-display text-5xl text-plum">Shop Wigs</h1>
         <p className="mt-3 max-w-xl text-charcoal/65">
           {products.length} hand-picked styles across synthetic and human blend.
           New drops land every month.
@@ -74,8 +74,8 @@ export default async function ShopPage(
               href={buildHref(t, sort)}
               className={`rounded-full px-5 py-2 text-sm font-semibold transition ${
                 type === t
-                  ? "bg-maroon text-warmwhite"
-                  : "border border-maroon/25 text-maroon hover:bg-blush"
+                  ? "bg-plum text-warmwhite"
+                  : "border border-plum/25 text-plum hover:bg-blush"
               }`}
             >
               {t}
@@ -93,7 +93,7 @@ export default async function ShopPage(
                 className={`rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-wide transition ${
                   sort === option.value
                     ? "bg-gold/20 text-charcoal"
-                    : "text-charcoal/50 hover:text-maroon"
+                    : "text-charcoal/50 hover:text-plum"
                 }`}
               >
                 {option.label}
@@ -105,7 +105,7 @@ export default async function ShopPage(
 
       {list.length === 0 ? (
         <div className="rounded-2xl border border-blush bg-blush/40 py-20 text-center">
-          <p className="font-display text-2xl text-maroon">Nothing here yet</p>
+          <p className="font-display text-2xl text-plum">Nothing here yet</p>
           <p className="mt-2 text-sm text-charcoal/60">
             Try a different filter — new styles drop every month.
           </p>

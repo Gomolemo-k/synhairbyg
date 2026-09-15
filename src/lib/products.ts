@@ -38,7 +38,7 @@ export const collections: Collection[] = [
     tagline: "The crown jewels",
     description:
       "Hand-finished human blend wigs with soft lace and a natural scalp line. The everyday luxury our babes swear by.",
-    gradient: ["#6b1f2b", "#8b3040"],
+    gradient: ["#5b2a44", "#a94e72"],
   },
   {
     slug: "synthetic",
@@ -78,7 +78,7 @@ export const products: Product[] = [
     featured: true,
     badge: "Best Seller",
     collection: "signature-blend",
-    gradient: ["#6b1f2b", "#8b3040"],
+    gradient: ["#5b2a44", "#a94e72"],
   },
   {
     id: "p02",
@@ -99,7 +99,7 @@ export const products: Product[] = [
     featured: true,
     badge: "Fan Favourite",
     collection: "signature-blend",
-    gradient: ["#8b3040", "#6b1f2b"],
+    gradient: ["#a94e72", "#5b2a44"],
   },
   {
     id: "p03",
@@ -117,7 +117,7 @@ export const products: Product[] = [
     color: "Jet Black",
     stock: 5,
     collection: "signature-blend",
-    gradient: ["#6b1f2b", "#211a1c"],
+    gradient: ["#5b2a44", "#211a1c"],
   },
   {
     id: "p04",
@@ -136,7 +136,7 @@ export const products: Product[] = [
     stock: 4,
     badge: "Premium",
     collection: "signature-blend",
-    gradient: ["#211a1c", "#6b1f2b"],
+    gradient: ["#211a1c", "#5b2a44"],
   },
   {
     id: "p05",
@@ -156,7 +156,7 @@ export const products: Product[] = [
     stock: 3,
     badge: "Trending",
     collection: "signature-blend",
-    gradient: ["#c9a46c", "#8b3040"],
+    gradient: ["#c9a46c", "#a94e72"],
   },
   {
     id: "p06",
@@ -177,7 +177,7 @@ export const products: Product[] = [
     featured: true,
     badge: "Value Pick",
     collection: "signature-blend",
-    gradient: ["#f4dde2", "#8b3040"],
+    gradient: ["#f4dde2", "#a94e72"],
   },
   {
     id: "p07",
@@ -195,7 +195,7 @@ export const products: Product[] = [
     color: "Natural Black",
     stock: 7,
     collection: "bridal-occasion",
-    gradient: ["#8b3040", "#c9a46c"],
+    gradient: ["#a94e72", "#c9a46c"],
   },
   {
     id: "p08",
@@ -234,7 +234,7 @@ export const products: Product[] = [
     color: "Natural Black",
     stock: 4,
     collection: "bridal-occasion",
-    gradient: ["#8b3040", "#6b1f2b"],
+    gradient: ["#a94e72", "#5b2a44"],
   },
   {
     id: "p10",
@@ -275,7 +275,7 @@ export const products: Product[] = [
     featured: true,
     badge: "Best Seller",
     collection: "synthetic",
-    gradient: ["#8b3040", "#6b1f2b"],
+    gradient: ["#a94e72", "#5b2a44"],
   },
   {
     id: "p12",
@@ -332,7 +332,7 @@ export const products: Product[] = [
     stock: 8,
     badge: "New",
     collection: "synthetic",
-    gradient: ["#211a1c", "#6b1f2b"],
+    gradient: ["#211a1c", "#5b2a44"],
   },
 ];
 

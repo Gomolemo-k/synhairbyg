@@ -13,13 +13,13 @@ export default function CartPage() {
   if (items.length === 0) {
     return (
       <div className="mx-auto max-w-3xl px-4 py-24 text-center sm:px-6">
-        <p className="font-display text-4xl text-maroon">Your cart is empty</p>
+        <p className="font-display text-4xl text-plum">Your cart is empty</p>
         <p className="mt-3 text-charcoal/60">
           Your next crown is waiting in the shop.
         </p>
         <Link
           href="/shop"
-          className="mt-8 inline-block rounded-full bg-maroon px-10 py-4 text-sm font-semibold text-warmwhite transition hover:bg-burgundy"
+          className="mt-8 inline-block rounded-full bg-plum px-10 py-4 text-sm font-semibold text-warmwhite transition hover:bg-rose"
         >
           Shop Wigs
         </Link>
@@ -31,9 +31,9 @@ export default function CartPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8">
-      <h1 className="font-display text-4xl text-maroon">Your Cart</h1>
+      <h1 className="font-display text-4xl text-plum">Your Cart</h1>
 
-      <div className="mt-4 rounded-full bg-blush px-5 py-3 text-sm text-maroon">
+      <div className="mt-4 rounded-full bg-blush px-5 py-3 text-sm text-plum">
         {shipping === 0 ? (
           <>Woohoo — you&apos;ve unlocked <span className="font-bold">free delivery</span>!</>
         ) : (
@@ -67,7 +67,7 @@ export default function CartPage() {
                     <div>
                       <Link
                         href={`/products/${product.slug}`}
-                        className="font-display text-xl text-maroon transition hover:text-burgundy"
+                        className="font-display text-xl text-plum transition hover:text-rose"
                       >
                         {product.name}
                       </Link>
@@ -77,7 +77,7 @@ export default function CartPage() {
                     </div>
                     <button
                       onClick={() => removeItem(item.productId)}
-                      className="text-xs text-charcoal/40 transition hover:text-maroon"
+                      className="text-xs text-charcoal/40 transition hover:text-plum"
                     >
                       Remove
                     </button>
@@ -87,7 +87,7 @@ export default function CartPage() {
                       value={item.qty}
                       onChange={(v) => updateQty(item.productId, v)}
                     />
-                    <span className="font-bold text-maroon">
+                    <span className="font-bold text-plum">
                       {formatZAR(product.price * item.qty)}
                     </span>
                   </div>
@@ -98,7 +98,7 @@ export default function CartPage() {
         </ul>
 
         <aside className="h-fit rounded-2xl border border-blush bg-warmwhite p-6">
-          <h2 className="font-display text-2xl text-maroon">Order Summary</h2>
+          <h2 className="font-display text-2xl text-plum">Order Summary</h2>
           <dl className="mt-5 space-y-3 text-sm">
             <div className="flex justify-between">
               <dt className="text-charcoal/60">Subtotal</dt>
@@ -116,18 +116,18 @@ export default function CartPage() {
             </div>
             <div className="flex justify-between border-t border-blush pt-3 text-base">
               <dt className="font-semibold">Total</dt>
-              <dd className="font-bold text-maroon">{formatZAR(total)}</dd>
+              <dd className="font-bold text-plum">{formatZAR(total)}</dd>
             </div>
           </dl>
           <Link
             href="/checkout"
-            className="mt-6 block rounded-full bg-maroon py-4 text-center text-sm font-semibold text-warmwhite transition hover:bg-burgundy"
+            className="mt-6 block rounded-full bg-plum py-4 text-center text-sm font-semibold text-warmwhite transition hover:bg-rose"
           >
             Proceed to Checkout
           </Link>
           <Link
             href="/shop"
-            className="mt-3 block text-center text-sm font-semibold text-maroon underline decoration-gold decoration-2 underline-offset-4 transition hover:text-burgundy"
+            className="mt-3 block text-center text-sm font-semibold text-plum underline decoration-gold decoration-2 underline-offset-4 transition hover:text-rose"
           >
             Continue shopping
           </Link>

@@ -16,7 +16,7 @@ export default function CollectionsPage() {
         <p className="text-xs font-bold uppercase tracking-[0.25em] text-gold">
           Curated for you
         </p>
-        <h1 className="mt-2 font-display text-5xl text-maroon">Collections</h1>
+        <h1 className="mt-2 font-display text-5xl text-plum">Collections</h1>
         <p className="mt-3 max-w-xl text-charcoal/65">
           Every wig belongs to a family. Pick your mood and shop the edit.
         </p>
@@ -29,7 +29,7 @@ export default function CollectionsPage() {
             <Link
               key={collection.slug}
               href={`/collections/${collection.slug}`}
-              className="group flex flex-col overflow-hidden rounded-3xl border border-blush bg-white transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-maroon/10"
+              className="group flex flex-col overflow-hidden rounded-3xl border border-blush bg-white transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-plum/10"
             >
               <div className="aspect-[4/5] overflow-hidden">
                 <ProductArt
@@ -43,7 +43,7 @@ export default function CollectionsPage() {
                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-gold">
                   {collection.tagline}
                 </p>
-                <h2 className="mt-2 font-display text-2xl text-maroon">
+                <h2 className="mt-2 font-display text-2xl text-plum">
                   {collection.name}
                 </h2>
                 <p className="mt-2 flex-1 text-sm leading-relaxed text-charcoal/60">
@@ -53,7 +53,7 @@ export default function CollectionsPage() {
                   <span className="font-semibold text-charcoal">
                     {items.length} styles
                   </span>
-                  <span className="font-semibold text-maroon underline decoration-gold decoration-2 underline-offset-4 transition group-hover:text-burgundy">
+                  <span className="font-semibold text-plum underline decoration-gold decoration-2 underline-offset-4 transition group-hover:text-rose">
                     Shop collection
                   </span>
                 </div>

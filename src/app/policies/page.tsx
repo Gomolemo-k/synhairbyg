@@ -122,7 +122,7 @@ export default function PoliciesPage() {
         <p className="text-xs font-bold uppercase tracking-[0.25em] text-gold">
           The fine print, in plain English
         </p>
-        <h1 className="mt-2 font-display text-5xl text-maroon">Policies</h1>
+        <h1 className="mt-2 font-display text-5xl text-plum">Policies</h1>
       </div>
 
       <div className="grid gap-10 lg:grid-cols-[240px_1fr]">
@@ -131,7 +131,7 @@ export default function PoliciesPage() {
             <a
               key={section.id}
               href={`#${section.id}`}
-              className="rounded-full px-4 py-2 text-sm font-semibold text-charcoal/60 transition hover:bg-blush hover:text-maroon"
+              className="rounded-full px-4 py-2 text-sm font-semibold text-charcoal/60 transition hover:bg-blush hover:text-plum"
             >
               {section.title}
             </a>
@@ -143,7 +143,7 @@ export default function PoliciesPage() {
             <section key={section.id} id={section.id} className="scroll-mt-28">
               <div className="mb-6 flex items-center gap-4">
                 <span className="h-8 w-1 rounded-full bg-gold" />
-                <h2 className="font-display text-3xl text-maroon">
+                <h2 className="font-display text-3xl text-plum">
                   {section.title}
                 </h2>
               </div>

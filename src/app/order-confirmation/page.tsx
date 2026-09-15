@@ -36,13 +36,13 @@ function OrderConfirmationContent() {
   if (!orderId || notFound) {
     return (
       <div className="mx-auto max-w-2xl px-4 py-24 text-center sm:px-6">
-        <h1 className="font-display text-4xl text-maroon">Order not found</h1>
+        <h1 className="font-display text-4xl text-plum">Order not found</h1>
         <p className="mt-3 text-charcoal/60">
           We couldn&apos;t find that order reference.
         </p>
         <Link
           href="/shop"
-          className="mt-8 inline-block rounded-full bg-maroon px-10 py-4 text-sm font-semibold text-warmwhite transition hover:bg-burgundy"
+          className="mt-8 inline-block rounded-full bg-plum px-10 py-4 text-sm font-semibold text-warmwhite transition hover:bg-rose"
         >
           Back to Shopping
         </Link>
@@ -63,7 +63,7 @@ function OrderConfirmationContent() {
             <span className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-blush text-3xl text-gold">
               ✓
             </span>
-            <h1 className="mt-5 font-display text-4xl text-maroon">
+            <h1 className="mt-5 font-display text-4xl text-plum">
               Thank you{order.customer.firstName ? `, ${order.customer.firstName}` : ""}!
             </h1>
             <p className="mt-3 text-charcoal/65">
@@ -71,7 +71,7 @@ function OrderConfirmationContent() {
               <span
                 className={
                   order.status === "paid" || order.status === "complete"
-                    ? "font-semibold text-maroon"
+                    ? "font-semibold text-plum"
                     : "font-semibold text-gold"
                 }
               >
@@ -85,12 +85,12 @@ function OrderConfirmationContent() {
               <span className="font-semibold">Live payments aren&apos;t connected yet.</span>{" "}
               This was a test order for the demo checkout, so no payment was
               taken. If you were charged, email{" "}
-              <span className="font-semibold text-maroon">hello@synhairbyg.com</span>.
+              <span className="font-semibold text-plum">hello@synhairbyg.com</span>.
             </div>
           )}
 
           <div className="mt-8 rounded-2xl border border-blush bg-warmwhite p-6 sm:p-8">
-            <h2 className="font-display text-2xl text-maroon">Order Summary</h2>
+            <h2 className="font-display text-2xl text-plum">Order Summary</h2>
             <ul className="mt-4 space-y-3 text-sm">
               {order.lines.map((line) => (
                 <li
@@ -118,7 +118,7 @@ function OrderConfirmationContent() {
               </div>
               <div className="flex justify-between border-t border-blush pt-2 font-semibold">
                 <dt>Total</dt>
-                <dd className="text-maroon">{formatZAR(order.total)}</dd>
+                <dd className="text-plum">{formatZAR(order.total)}</dd>
               </div>
             </dl>
           </div>
@@ -143,7 +143,7 @@ function OrderConfirmationContent() {
             </div>
           </div>
 
-          <div className="mt-8 rounded-2xl bg-maroon p-6 text-center text-warmwhite">
+          <div className="mt-8 rounded-2xl bg-plum p-6 text-center text-warmwhite">
             <p className="font-display text-xl">What happens next?</p>
             <p className="mt-2 text-sm text-warmwhite/75">
               {order.status === "paid" || order.status === "complete"
@@ -155,13 +155,13 @@ function OrderConfirmationContent() {
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Link
               href="/shop"
-              className="rounded-full bg-maroon px-8 py-4 text-sm font-semibold text-warmwhite transition hover:bg-burgundy"
+              className="rounded-full bg-plum px-8 py-4 text-sm font-semibold text-warmwhite transition hover:bg-rose"
             >
               Continue Shopping
             </Link>
             <Link
               href="/policies"
-              className="rounded-full border border-maroon/30 px-8 py-4 text-sm font-semibold text-maroon transition hover:bg-blush"
+              className="rounded-full border border-plum/30 px-8 py-4 text-sm font-semibold text-plum transition hover:bg-blush"
             >
               View Policies
             </Link>

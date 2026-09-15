@@ -21,11 +21,11 @@ export default function ContactForm() {
   if (sent) {
     return (
       <div className="rounded-2xl border border-blush bg-blush/40 p-10 text-center">
-        <p className="font-display text-2xl text-maroon">Your email draft is ready</p>
+        <p className="font-display text-2xl text-plum">Your email draft is ready</p>
         <p className="mt-2 text-sm text-charcoal/60">
           We replied to this address once, but now it&apos;s your turn — just hit
           send in your mail app. Prefer WhatsApp? Message{" "}
-          <span className="font-semibold text-maroon">+27 82 000 0000</span> and
+          <span className="font-semibold text-plum">+27 82 000 0000</span> and
           we&apos;ll answer fast.
         </p>
       </div>
@@ -33,7 +33,7 @@ export default function ContactForm() {
   }
 
   const inputClasses =
-    "w-full rounded-xl border border-maroon/20 bg-white px-4 py-3 text-sm text-charcoal outline-none transition focus:border-maroon";
+    "w-full rounded-xl border border-plum/20 bg-white px-4 py-3 text-sm text-charcoal outline-none transition focus:border-plum";
 
   return (
     <form
@@ -102,7 +102,7 @@ export default function ContactForm() {
 
       <button
         type="submit"
-        className="mt-6 w-full rounded-full bg-maroon py-4 text-sm font-semibold text-warmwhite transition hover:bg-burgundy"
+        className="mt-6 w-full rounded-full bg-plum py-4 text-sm font-semibold text-warmwhite transition hover:bg-rose"
       >
         Send Enquiry
       </button>

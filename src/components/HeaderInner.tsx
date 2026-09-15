@@ -10,7 +10,7 @@ export function CartToggle() {
     <button
       onClick={openCart}
       aria-label={`Open cart (${count} items)`}
-      className="relative flex h-10 w-10 items-center justify-center rounded-full border border-maroon/25 text-maroon transition hover:bg-blush"
+      className="relative flex h-10 w-10 items-center justify-center rounded-full border border-plum/25 text-plum transition hover:bg-blush"
     >
       <svg
         viewBox="0 0 24 24"
@@ -26,7 +26,7 @@ export function CartToggle() {
         <path d="M16 10a4 4 0 01-8 0" />
       </svg>
       {count > 0 && (
-        <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-maroon text-[10px] font-bold text-warmwhite">
+        <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-plum text-[10px] font-bold text-warmwhite">
           {count}
         </span>
       )}
@@ -39,7 +39,7 @@ export function MobileMenuToggle({ open, setOpen }: { open: boolean; setOpen: (v
     <button
       onClick={() => setOpen(!open)}
       aria-label="Toggle menu"
-      className="flex h-10 w-10 items-center justify-center rounded-full border border-maroon/25 text-maroon transition hover:bg-blush md:hidden"
+      className="flex h-10 w-10 items-center justify-center rounded-full border border-plum/25 text-plum transition hover:bg-blush md:hidden"
     >
       {open ? (
         <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
@@ -66,7 +66,7 @@ export default function HeaderInner({ open, setOpen }: { open: boolean; setOpen:
     <div className="flex items-center justify-between">
       <Link
         href="/"
-        className="font-display text-2xl font-semibold tracking-wide text-maroon transition hover:text-burgundy md:text-3xl"
+        className="font-display text-2xl font-semibold tracking-wide text-plum transition hover:text-rose md:text-3xl"
       >
         Syn<span className="text-gold">Hair</span>byG
       </Link>
@@ -76,7 +76,7 @@ export default function HeaderInner({ open, setOpen }: { open: boolean; setOpen:
           <Link
             key={link.href}
             href={link.href}
-            className="transition hover:text-maroon"
+            className="transition hover:text-plum"
           >
             {link.label}
           </Link>

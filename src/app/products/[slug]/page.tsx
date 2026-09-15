@@ -59,13 +59,13 @@ export default async function ProductPage(
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
       <nav className="mb-8 text-xs font-semibold uppercase tracking-wide text-charcoal/50">
-        <Link href="/shop" className="transition hover:text-maroon">
+        <Link href="/shop" className="transition hover:text-plum">
           Shop
         </Link>
         <span className="mx-2">/</span>
         <Link
           href={`/collections/${product.collection}`}
-          className="transition hover:text-maroon"
+          className="transition hover:text-plum"
         >
           {product.collection === "signature-blend"
             ? "Signature Human Blend"
@@ -74,7 +74,7 @@ export default async function ProductPage(
               : "Bridal & Occasion"}
         </Link>
         <span className="mx-2">/</span>
-        <span className="text-maroon">{product.name}</span>
+        <span className="text-plum">{product.name}</span>
       </nav>
 
       <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
@@ -83,11 +83,11 @@ export default async function ProductPage(
             from={product.gradient[0]}
             to={product.gradient[1]}
             name={product.name}
-            className="aspect-[4/5] w-full rounded-3xl shadow-xl shadow-maroon/10"
+            className="aspect-[4/5] w-full rounded-3xl shadow-xl shadow-plum/10"
           />
           <div className="absolute left-4 top-4 flex flex-col gap-2">
             {product.badge && (
-              <span className="rounded-full bg-maroon px-3 py-1 text-xs font-bold uppercase tracking-wide text-warmwhite">
+              <span className="rounded-full bg-plum px-3 py-1 text-xs font-bold uppercase tracking-wide text-warmwhite">
                 {product.badge}
               </span>
             )}
@@ -103,7 +103,7 @@ export default async function ProductPage(
           <p className="text-xs font-bold uppercase tracking-[0.25em] text-gold">
             {product.type}
           </p>
-          <h1 className="mt-2 font-display text-4xl text-maroon sm:text-5xl">
+          <h1 className="mt-2 font-display text-4xl text-plum sm:text-5xl">
             {product.name}
           </h1>
           <p className="mt-2 text-charcoal/60">{product.short}</p>
@@ -127,7 +127,7 @@ export default async function ProductPage(
           <div className="mt-3 flex items-center gap-2 text-sm">
             <span className="text-gold">★★★★★</span>
             <span className="text-charcoal/55">4.9 · Loved by our babes</span>
-            <span className="ml-auto rounded-full bg-blush px-3 py-1 text-xs font-semibold text-maroon">
+            <span className="ml-auto rounded-full bg-blush px-3 py-1 text-xs font-semibold text-plum">
               In stock · {product.stock} available
             </span>
           </div>
@@ -168,7 +168,7 @@ export default async function ProductPage(
               ],
             ].map(([title, text]) => (
               <div key={title} className="py-4">
-                <p className="font-semibold text-maroon">{title}</p>
+                <p className="font-semibold text-plum">{title}</p>
                 <p className="mt-1 text-charcoal/65">{text}</p>
               </div>
             ))}
@@ -182,7 +182,7 @@ export default async function ProductPage(
             <p className="text-xs font-bold uppercase tracking-[0.25em] text-gold">
               Complete the look
             </p>
-            <h2 className="mt-2 font-display text-3xl text-maroon">
+            <h2 className="mt-2 font-display text-3xl text-plum">
               You may also love
             </h2>
           </div>

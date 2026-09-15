@@ -19,7 +19,7 @@ export default function Header() {
   return (
     <>
       <CartDrawer />
-      <div className="bg-maroon py-2 text-center text-xs font-medium tracking-wide text-warmwhite">
+      <div className="bg-plum py-2 text-center text-xs font-medium tracking-wide text-warmwhite">
         Free nationwide delivery on orders over R1,500 &middot; Secure PayFast
         checkout
       </div>
@@ -34,7 +34,7 @@ export default function Header() {
                   key={link.href}
                   href={link.href}
                   onClick={() => setOpen(false)}
-                  className="py-3 font-semibold text-charcoal/80 transition hover:text-maroon"
+                  className="py-3 font-semibold text-charcoal/80 transition hover:text-plum"
                 >
                   {link.label}
                 </Link>

@@ -34,11 +34,11 @@ export default async function CollectionPage(
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
       <nav className="mb-8 text-xs font-semibold uppercase tracking-wide text-charcoal/50">
-        <Link href="/collections" className="transition hover:text-maroon">
+        <Link href="/collections" className="transition hover:text-plum">
           Collections
         </Link>
         <span className="mx-2">/</span>
-        <span className="text-maroon">{collection.name}</span>
+        <span className="text-plum">{collection.name}</span>
       </nav>
 
       <div className="overflow-hidden rounded-3xl">

@@ -14,7 +14,7 @@ export default function ProductCard({ product }: { product: Product }) {
   return (
     <Link
       href={`/products/${product.slug}`}
-      className="group flex flex-col overflow-hidden rounded-2xl border border-blush bg-white transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-maroon/10"
+      className="group flex flex-col overflow-hidden rounded-2xl border border-blush bg-white transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-plum/10"
     >
       <div className="relative aspect-[4/5] overflow-hidden">
         <ProductArt
@@ -25,7 +25,7 @@ export default function ProductCard({ product }: { product: Product }) {
         />
         <div className="absolute left-3 top-3 flex flex-col gap-1.5">
           {product.badge && (
-            <span className="rounded-full bg-maroon px-3 py-1 text-[10px] font-bold uppercase tracking-wide text-warmwhite">
+            <span className="rounded-full bg-plum px-3 py-1 text-[10px] font-bold uppercase tracking-wide text-warmwhite">
               {product.badge}
             </span>
           )}
@@ -41,7 +41,7 @@ export default function ProductCard({ product }: { product: Product }) {
       </div>
 
       <div className="flex flex-1 flex-col gap-1 p-4">
-        <h3 className="font-display text-lg leading-snug text-maroon">
+        <h3 className="font-display text-lg leading-snug text-plum">
           {product.name}
         </h3>
         <p className="text-xs text-charcoal/55">{product.short}</p>

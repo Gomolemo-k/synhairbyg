@@ -17,12 +17,12 @@ export function QtyStepper({
 }) {
   const size = small ? "h-7 w-7 text-sm" : "h-9 w-9 text-base";
   return (
-    <div className="inline-flex items-center rounded-full border border-maroon/25 bg-white">
+    <div className="inline-flex items-center rounded-full border border-plum/25 bg-white">
       <button
         type="button"
         aria-label="Decrease quantity"
         onClick={() => onChange(value - 1)}
-        className={`${size} rounded-l-full text-maroon transition hover:bg-blush`}
+        className={`${size} rounded-l-full text-plum transition hover:bg-blush`}
       >
         −
       </button>
@@ -33,7 +33,7 @@ export function QtyStepper({
         type="button"
         aria-label="Increase quantity"
         onClick={() => onChange(value + 1)}
-        className={`${size} rounded-r-full text-maroon transition hover:bg-blush`}
+        className={`${size} rounded-r-full text-plum transition hover:bg-blush`}
       >
         +
       </button>
@@ -62,14 +62,14 @@ export default function CartDrawer() {
         aria-label="Shopping cart"
       >
         <div className="flex items-center justify-between border-b border-blush px-6 py-5">
-          <h2 className="font-display text-2xl text-maroon">
+          <h2 className="font-display text-2xl text-plum">
             Your Cart{" "}
             <span className="text-gold">({items.reduce((a, b) => a + b.qty, 0)})</span>
           </h2>
           <button
             onClick={closeCart}
             aria-label="Close cart"
-            className="grid h-9 w-9 place-items-center rounded-full border border-maroon/20 text-maroon transition hover:bg-blush"
+            className="grid h-9 w-9 place-items-center rounded-full border border-plum/20 text-plum transition hover:bg-blush"
           >
             ✕
           </button>
@@ -78,14 +78,14 @@ export default function CartDrawer() {
         <div className="flex-1 overflow-y-auto px-6 py-4">
           {items.length === 0 ? (
             <div className="flex h-full flex-col items-center justify-center text-center">
-              <p className="font-display text-xl text-maroon">Your cart is empty</p>
+              <p className="font-display text-xl text-plum">Your cart is empty</p>
               <p className="mt-2 text-sm text-charcoal/60">
                 Time to find your next crown.
               </p>
               <Link
                 href="/shop"
                 onClick={closeCart}
-                className="mt-6 rounded-full bg-maroon px-6 py-3 text-sm font-semibold text-warmwhite transition hover:bg-burgundy"
+                className="mt-6 rounded-full bg-plum px-6 py-3 text-sm font-semibold text-warmwhite transition hover:bg-rose"
               >
                 Shop Wigs
               </Link>
@@ -120,7 +120,7 @@ export default function CartDrawer() {
                         <button
                           onClick={() => removeItem(item.productId)}
                           aria-label={`Remove ${product.name}`}
-                          className="text-xs text-charcoal/40 transition hover:text-maroon"
+                          className="text-xs text-charcoal/40 transition hover:text-plum"
                         >
                           Remove
                         </button>
@@ -131,7 +131,7 @@ export default function CartDrawer() {
                           value={item.qty}
                           onChange={(v) => updateQty(item.productId, v)}
                         />
-                        <span className="text-sm font-semibold text-maroon">
+                        <span className="text-sm font-semibold text-plum">
                           {formatZAR(product.price * item.qty)}
                         </span>
                       </div>
@@ -158,20 +158,20 @@ export default function CartDrawer() {
               </div>
               <div className="flex justify-between border-t border-blush pt-2 text-base">
                 <dt className="font-semibold text-charcoal">Total</dt>
-                <dd className="font-semibold text-maroon">{formatZAR(total)}</dd>
+                <dd className="font-semibold text-plum">{formatZAR(total)}</dd>
               </div>
             </dl>
             <Link
               href="/checkout"
               onClick={closeCart}
-              className="mt-4 block rounded-full bg-maroon py-3.5 text-center text-sm font-semibold text-warmwhite transition hover:bg-burgundy"
+              className="mt-4 block rounded-full bg-plum py-3.5 text-center text-sm font-semibold text-warmwhite transition hover:bg-rose"
             >
               Checkout
             </Link>
             <Link
               href="/cart"
               onClick={closeCart}
-              className="mt-2 block rounded-full border border-maroon/30 py-3 text-center text-sm font-semibold text-maroon transition hover:bg-blush"
+              className="mt-2 block rounded-full border border-plum/30 py-3 text-center text-sm font-semibold text-plum transition hover:bg-blush"
             >
               View Full Cart
             </Link>

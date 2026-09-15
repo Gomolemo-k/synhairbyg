@@ -15,7 +15,7 @@ export default function AboutPage() {
         <p className="text-xs font-bold uppercase tracking-[0.25em] text-gold">
           Our story
         </p>
-        <h1 className="mt-3 font-display text-5xl text-maroon">
+        <h1 className="mt-3 font-display text-5xl text-plum">
           Behind the <span className="italic text-gold">G</span>
         </h1>
         <p className="mt-5 leading-relaxed text-charcoal/70">
@@ -28,7 +28,7 @@ export default function AboutPage() {
 
       <div className="mt-16 grid items-center gap-12 lg:grid-cols-2">
         <div className="order-2 lg:order-1">
-          <h2 className="font-display text-3xl text-maroon">
+          <h2 className="font-display text-3xl text-plum">
             Quality you can trust, prices that make sense
           </h2>
           <div className="mt-6 space-y-5 text-charcoal/70">
@@ -50,17 +50,17 @@ export default function AboutPage() {
           </div>
           <Link
             href="/shop"
-            className="mt-8 inline-block rounded-full bg-maroon px-8 py-4 text-sm font-semibold text-warmwhite transition hover:bg-burgundy"
+            className="mt-8 inline-block rounded-full bg-plum px-8 py-4 text-sm font-semibold text-warmwhite transition hover:bg-rose"
           >
             Shop the Story
           </Link>
         </div>
         <div className="order-1 lg:order-2">
           <ProductArt
-            from="#6b1f2b"
-            to="#8b3040"
+            from="#5b2a44"
+            to="#a94e72"
             name="SynHair by G"
-            className="aspect-[4/5] rounded-3xl shadow-xl shadow-maroon/10"
+            className="aspect-[4/5] rounded-3xl shadow-xl shadow-plum/10"
           />
         </div>
       </div>
@@ -87,7 +87,7 @@ export default function AboutPage() {
             <span className="grid h-11 w-11 place-items-center rounded-full bg-blush text-gold">
               ✦
             </span>
-            <h3 className="mt-4 font-display text-xl text-maroon">{title}</h3>
+            <h3 className="mt-4 font-display text-xl text-plum">{title}</h3>
             <p className="mt-2 text-sm leading-relaxed text-charcoal/65">{text}</p>
           </div>
         ))}

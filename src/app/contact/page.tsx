@@ -37,7 +37,7 @@ export default function ContactPage() {
         <p className="text-xs font-bold uppercase tracking-[0.25em] text-gold">
           Talk to us
         </p>
-        <h1 className="mt-2 font-display text-5xl text-maroon">Contact</h1>
+        <h1 className="mt-2 font-display text-5xl text-plum">Contact</h1>
         <p className="mt-3 leading-relaxed text-charcoal/65">
           Questions about a wig, restock dates, wholesale, or a return? Drop us a
           line — a real human answers.
@@ -61,7 +61,7 @@ export default function ContactPage() {
             </div>
           ))}
 
-          <div className="rounded-2xl bg-maroon p-6 text-warmwhite sm:col-span-2">
+          <div className="rounded-2xl bg-plum p-6 text-warmwhite sm:col-span-2">
             <p className="font-display text-xl italic">
               “Fast replies, honest answers, and it always feels like a friend is
               helping.”

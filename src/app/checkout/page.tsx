@@ -104,7 +104,7 @@ function CheckoutContent() {
   if (items.length === 0) {
     return (
       <div className="mx-auto max-w-3xl px-4 py-24 text-center sm:px-6">
-        <p className="font-display text-4xl text-maroon">Nothing to check out</p>
+        <p className="font-display text-4xl text-plum">Nothing to check out</p>
         <p className="mt-3 text-charcoal/60">
           {cancelled
             ? "Your payment was cancelled — no charge was made. Find what you love and try again."
@@ -112,7 +112,7 @@ function CheckoutContent() {
         </p>
         <Link
           href="/shop"
-          className="mt-8 inline-block rounded-full bg-maroon px-10 py-4 text-sm font-semibold text-warmwhite transition hover:bg-burgundy"
+          className="mt-8 inline-block rounded-full bg-plum px-10 py-4 text-sm font-semibold text-warmwhite transition hover:bg-rose"
         >
           {cancelled ? "Back to Shopping" : "Shop Wigs"}
         </Link>
@@ -121,7 +121,7 @@ function CheckoutContent() {
   }
 
   const inputClasses =
-    "w-full rounded-xl border border-maroon/20 bg-white px-4 py-3 text-sm text-charcoal outline-none transition focus:border-maroon";
+    "w-full rounded-xl border border-plum/20 bg-white px-4 py-3 text-sm text-charcoal outline-none transition focus:border-plum";
   const labelClasses =
     "mb-1.5 block text-xs font-semibold uppercase tracking-wide text-charcoal/60";
   const isCollection = form.method === "collection";
@@ -135,7 +135,7 @@ function CheckoutContent() {
         </div>
       )}
 
-      <h1 className="font-display text-4xl text-maroon">Checkout</h1>
+      <h1 className="font-display text-4xl text-plum">Checkout</h1>
       <p className="mt-2 text-sm text-charcoal/55">
         Secure checkout powered by PayFast. Your card details never touch our
         servers.
@@ -144,7 +144,7 @@ function CheckoutContent() {
       <form onSubmit={handleSubmit} className="mt-10 grid gap-10 lg:grid-cols-[1fr_360px]">
         <div className="space-y-8">
           <section className="rounded-2xl border border-blush bg-warmwhite p-6 sm:p-8">
-            <h2 className="font-display text-2xl text-maroon">Contact</h2>
+            <h2 className="font-display text-2xl text-plum">Contact</h2>
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
               <label className="block">
                 <span className={labelClasses}>First name</span>
@@ -189,7 +189,7 @@ function CheckoutContent() {
           </section>
 
           <section className="rounded-2xl border border-blush bg-warmwhite p-6 sm:p-8">
-            <h2 className="font-display text-2xl text-maroon">Delivery</h2>
+            <h2 className="font-display text-2xl text-plum">Delivery</h2>
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
               {(
                 [
@@ -201,8 +201,8 @@ function CheckoutContent() {
                   key={value}
                   className={`flex cursor-pointer items-center gap-3 rounded-xl border px-4 py-3 text-sm transition ${
                     form.method === value
-                      ? "border-maroon bg-blush/50 font-semibold text-maroon"
-                      : "border-maroon/20 bg-white text-charcoal/70 hover:border-maroon/40"
+                      ? "border-plum bg-blush/50 font-semibold text-plum"
+                      : "border-plum/20 bg-white text-charcoal/70 hover:border-plum/40"
                   }`}
                 >
                   <input
@@ -211,7 +211,7 @@ function CheckoutContent() {
                     value={value}
                     checked={form.method === value}
                     onChange={() => set("method", value)}
-                    className="accent-maroon"
+                    className="accent-plum"
                   />
                   {label}
                 </label>
@@ -289,7 +289,7 @@ function CheckoutContent() {
         </div>
 
         <aside className="h-fit rounded-2xl border border-blush bg-warmwhite p-6">
-          <h2 className="font-display text-2xl text-maroon">Your Order</h2>
+          <h2 className="font-display text-2xl text-plum">Your Order</h2>
           <ul className="mt-4 space-y-3 text-sm">
             {items.map((item) => {
               const product = getProductById(item.productId);
@@ -325,12 +325,12 @@ function CheckoutContent() {
             </div>
             <div className="flex justify-between border-t border-blush pt-3 text-base">
               <dt className="font-semibold">Total</dt>
-              <dd className="font-bold text-maroon">{formatZAR(total)}</dd>
+              <dd className="font-bold text-plum">{formatZAR(total)}</dd>
             </div>
           </dl>
 
           {error && (
-            <p className="mt-4 rounded-xl bg-maroon/10 px-4 py-3 text-sm font-medium text-maroon">
+            <p className="mt-4 rounded-xl bg-plum/10 px-4 py-3 text-sm font-medium text-plum">
               {error}
             </p>
           )}
@@ -338,7 +338,7 @@ function CheckoutContent() {
           <button
             type="submit"
             disabled={submitting}
-            className="mt-6 w-full rounded-full bg-maroon py-4 text-sm font-semibold text-warmwhite transition hover:bg-burgundy disabled:cursor-not-allowed disabled:opacity-60"
+            className="mt-6 w-full rounded-full bg-plum py-4 text-sm font-semibold text-warmwhite transition hover:bg-rose disabled:cursor-not-allowed disabled:opacity-60"
           >
             {submitting
               ? "Processing…"
@@ -351,7 +351,7 @@ function CheckoutContent() {
             agree to our{" "}
             <Link
               href="/policies"
-              className="font-semibold text-maroon underline"
+              className="font-semibold text-plum underline"
             >
               policies
             </Link>
