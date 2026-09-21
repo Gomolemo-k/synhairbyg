@@ -24,13 +24,34 @@ function OrderConfirmationContent() {
 
   useEffect(() => {
     if (!orderId) return;
-    fetch(`/api/orders/${encodeURIComponent(orderId)}`)
-      .then(async (res) => {
+    let stop = false;
+
+    const load = async () => {
+      try {
+        const res = await fetch(`/api/orders/${encodeURIComponent(orderId)}`);
         if (!res.ok) throw new Error("not found");
         const data = await res.json();
+        if (stop) return;
         setOrder(data.order);
-      })
-      .catch(() => setNotFound(true));
+      } catch {
+        if (!stop) setNotFound(true);
+      }
+    };
+
+    void load();
+
+    // Payment is confirmed by the Yoco webhook, which may land a moment after
+    // the redirect. Poll a few times so the page reflects the real status.
+    const timer = window.setInterval(() => {
+      void load();
+    }, 3000);
+    const timeout = window.setTimeout(() => window.clearInterval(timer), 15000);
+
+    return () => {
+      stop = true;
+      window.clearInterval(timer);
+      window.clearTimeout(timeout);
+    };
   }, [orderId]);
 
   if (!orderId || notFound) {
@@ -82,10 +103,15 @@ function OrderConfirmationContent() {
 
           {order.status === "demo" && (
             <div className="mt-8 rounded-2xl border border-gold/40 bg-gold/10 p-5 text-sm text-charcoal">
-              <span className="font-semibold">Live payments aren&apos;t connected yet.</span>{" "}
+              <span className="font-semibold">
+                Live payments aren&apos;t connected yet.
+              </span>{" "}
               This was a test order for the demo checkout, so no payment was
               taken. If you were charged, email{" "}
-              <span className="font-semibold text-plum">hello@synhairbyg.com</span>.
+              <span className="font-semibold text-plum">
+                hello@synhairbyg.com
+              </span>
+              .
             </div>
           )}
 
@@ -136,9 +162,23 @@ function OrderConfirmationContent() {
                 Delivery
               </p>
               <p className="mt-2 text-charcoal/70">
-                {order.shipping.method === "collection"
-                  ? "Johannesburg collection"
-                  : `${order.shipping.address1}\u00A0${order.shipping.address2 ?? ""} · ${order.shipping.city}`}
+                {order.paxi ? (
+                  <>
+                    <span className="font-semibold text-plum">
+                      {order.paxi.pointName}
+                    </span>
+                    <br />
+                    <span className="text-charcoal/60">
+                      {order.paxi.pointAddress}
+                    </span>
+                    <br />
+                    <span className="text-xs text-charcoal/50">
+                      PAXI {order.paxi.service} · {order.paxi.bag} bag
+                    </span>
+                  </>
+                ) : (
+                  `${order.shipping.address1}\u00A0${order.shipping.address2 ?? ""} · ${order.shipping.city}`
+                )}
               </p>
             </div>
           </div>
@@ -146,9 +186,23 @@ function OrderConfirmationContent() {
           <div className="mt-8 rounded-2xl bg-plum p-6 text-center text-warmwhite">
             <p className="font-display text-xl">What happens next?</p>
             <p className="mt-2 text-sm text-warmwhite/75">
-              {order.status === "paid" || order.status === "complete"
-                ? "We're packing your crown — dispatch happens within 1–2 working days and your tracking number lands on WhatsApp."
-                : "Once payment confirms, we'll WhatsApp your tracking number. Need help? Message +27 82 000 0000."}
+              {order.shipping.method === "paxi" && order.paxi ? (
+                order.status === "paid" || order.status === "complete" ? (
+                  <>
+                    We&apos;re packing your crown — your order ships to{" "}
+                    <span className="font-semibold">{order.paxi.pointName}</span>{" "}
+                    via PAXI {order.paxi.service === "express"
+                      ? "Express (3–5 business days)"
+                      : "(7–9 business days)"}.
+                  </>
+                ) : (
+                  "Once payment confirms, your order ships to your chosen PEP store and you'll get an SMS when it's ready to collect."
+                )
+              ) : order.status === "paid" || order.status === "complete" ? (
+                "We're packing your crown — dispatch happens within 1–2 working days and your tracking number lands on WhatsApp."
+              ) : (
+                "Once payment confirms, we'll WhatsApp your tracking number. Need help? Message +27 82 000 0000."
+              )}
             </p>
           </div>
 

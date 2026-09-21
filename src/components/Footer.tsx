@@ -79,7 +79,7 @@ export default function Footer() {
         <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-warmwhite/15 pt-6 text-xs text-warmwhite/55 sm:flex-row">
           <p>&copy; {new Date().getFullYear()} SynHairbyG. All rights reserved.</p>
           <p className="flex items-center gap-3">
-            <span>Secure PayFast payments</span>
+            <span>Secure Yoco payments</span>
             <span className="h-1 w-1 rounded-full bg-gold" />
             <span>Made with love in SA</span>
           </p>

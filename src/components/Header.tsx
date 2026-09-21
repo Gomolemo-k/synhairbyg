@@ -20,7 +20,7 @@ export default function Header() {
     <>
       <CartDrawer />
       <div className="bg-plum py-2 text-center text-xs font-medium tracking-wide text-warmwhite">
-        Free nationwide delivery on orders over R1,500 &middot; Secure PayFast
+        Free nationwide delivery on orders over R1,500 &middot; Secure Yoco
         checkout
       </div>
       <header className="sticky top-0 z-30 border-b border-blush bg-warmwhite/90 backdrop-blur">

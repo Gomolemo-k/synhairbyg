@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     template: "%s | SynHairbyG",
   },
   description:
-    "Shop hand-picked synthetic and human blend wigs by SynHairbyG. Free delivery over R1,500, secure PayFast checkout, and wigs delivered across South Africa.",
+    "Shop hand-picked synthetic and human blend wigs by SynHairbyG. Free delivery over R1,500, secure Yoco checkout, and wigs delivered across South Africa.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

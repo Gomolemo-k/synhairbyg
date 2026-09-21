@@ -132,7 +132,7 @@ export default function CartPage() {
             Continue shopping
           </Link>
           <p className="mt-5 text-center text-xs text-charcoal/45">
-            Secure checkout via PayFast — cards, EFT &amp; Instant EFT.
+            Secure checkout via Yoco — instant payment in seconds.
           </p>
         </aside>
       </div>

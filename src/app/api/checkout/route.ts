@@ -1,7 +1,14 @@
 import { NextResponse } from "next/server";
 import { getProductById } from "@/lib/products";
-import { createOrderId, saveOrder, type ShippingMethod } from "@/lib/orders";
-import { buildPaymentForm, payfastConfigured } from "@/lib/payfast";
+import {
+  createOrderId,
+  saveOrder,
+  type Order,
+  type ShippingMethod,
+} from "@/lib/orders";
+import { getPaxiFee, type PaxiBag, type PaxiService } from "@/lib/paxiPricing";
+import { createYocoCheckout, YocoError, yocoConfigured } from "@/lib/yoco";
+import { getPaxiPoint } from "@/lib/paxiPoints";
 
 export const runtime = "nodejs";
 
@@ -14,12 +21,14 @@ type CheckoutBody = {
   };
   shipping: {
     method: ShippingMethod;
-    address1: string;
-    address2?: string;
-    city: string;
-    province: string;
-    postalCode: string;
     notes?: string;
+    paxi?: {
+      pointCode: string;
+      pointName: string;
+      pointAddress?: string;
+      bag: PaxiBag;
+      service: PaxiService;
+    };
   };
   lines: { productId: string; qty: number }[];
 };
@@ -44,9 +53,9 @@ export async function POST(req: Request) {
     );
   }
 
-  if (!body.shipping?.method || !body.shipping?.address1 || !body.shipping?.city) {
+  if (body.shipping?.method !== "paxi") {
     return NextResponse.json(
-      { error: "Please complete your delivery details." },
+      { error: "Please choose PAXI delivery." },
       { status: 400 },
     );
   }
@@ -79,25 +88,81 @@ export async function POST(req: Request) {
     });
   }
 
-  const subtotal = lines.reduce((sum, l) => sum + l.price * l.qty, 0);
-  const shippingFee =
-    body.shipping.method === "collection" || subtotal >= 1500 ? 0 : 129;
+  const method = body.shipping.method;
+  const bag: PaxiBag =
+    body.shipping.paxi?.bag === "large" ? "large" : "standard";
+  const service: PaxiService =
+    body.shipping.paxi?.service === "express" ? "express" : "standard";
 
-  const order = {
+  let shippingFee = 0;
+  let paxiPoint:
+    | { code: string; name: string; address: string }
+    | undefined;
+
+  if (method === "paxi") {
+    const submittedCode = body.shipping.paxi?.pointCode;
+    if (!submittedCode || !body.shipping.paxi?.pointName) {
+      return NextResponse.json(
+        { error: "Please choose a PAXI collection point." },
+        { status: 400 },
+      );
+    }
+
+    paxiPoint = { code: submittedCode, name: body.shipping.paxi.pointName, address: body.shipping.paxi.pointAddress ?? "" };
+
+    // Prefer the authoritative point from the database; fall back to what the
+    // browser submitted when no database is configured (demo mode).
+    const dbPoint = await getPaxiPoint(submittedCode);
+    if (dbPoint) {
+      paxiPoint = {
+        code: dbPoint.code,
+        name: dbPoint.name,
+        address: [dbPoint.address, dbPoint.suburb, dbPoint.city]
+          .filter(Boolean)
+          .join(", "),
+      };
+    }
+
+    shippingFee = getPaxiFee(bag, service);
+  }
+
+  const subtotal = lines.reduce((sum, l) => sum + l.price * l.qty, 0);
+  const total = subtotal + shippingFee;
+  const paid = yocoConfigured;
+
+  const order: Order = {
     id: createOrderId(),
     createdAt: new Date().toISOString(),
     customer: body.customer,
-    shipping: body.shipping,
+    shipping: {
+      method,
+      address1: "",
+      address2: "",
+      city: paxiPoint?.address ?? "",
+      province: "",
+      postalCode: "",
+      notes: body.shipping.notes ?? "",
+    },
+    paxi: paxiPoint
+        ? {
+            pointCode: paxiPoint.code,
+            pointName: paxiPoint.name,
+            pointAddress: paxiPoint.address,
+            bag,
+            service,
+          }
+        : undefined,
     lines,
     subtotal,
     shippingFee,
-    total: subtotal + shippingFee,
-    status: payfastConfigured ? ("pending" as const) : ("demo" as const),
+    total,
+    status: paid ? ("pending" as const) : ("demo" as const),
+    paymentProvider: paid ? ("yoco" as const) : ("demo" as const),
   };
 
   await saveOrder(order);
 
-  if (!payfastConfigured) {
+  if (!paid) {
     return NextResponse.json({ mode: "demo", orderId: order.id });
   }
 
@@ -106,7 +171,45 @@ export async function POST(req: Request) {
     process.env.NEXT_PUBLIC_SITE_URL ??
     "http://localhost:3000";
 
-  const { action, fields } = buildPaymentForm(order, baseUrl);
+  let checkout;
+  try {
+    checkout = await createYocoCheckout({
+      amountCents: Math.round(total * 100),
+      externalId: order.id,
+      metadata: {
+        orderId: order.id,
+        customerEmail: order.customer.email,
+      },
+      lineItems: [
+        ...lines.map((l) => ({
+          displayName: l.name,
+          quantity: l.qty,
+          pricingDetails: { price: Math.round(l.price * 100) },
+        })),
+        {
+          displayName: `PAXI ${service} delivery (${bag} bag)`,
+          quantity: 1,
+          pricingDetails: { price: Math.round(shippingFee * 100) },
+        },
+      ],
+      successUrl: `${baseUrl}/order-confirmation?order=${encodeURIComponent(order.id)}`,
+      cancelUrl: `${baseUrl}/checkout?cancelled=1`,
+      failureUrl: `${baseUrl}/checkout?failed=1`,
+    });
+  } catch (err) {
+    if (err instanceof YocoError) {
+      return NextResponse.json({ error: err.message }, { status: 502 });
+    }
+    throw err;
+  }
 
-  return NextResponse.json({ mode: "payfast", action, fields, orderId: order.id });
+  order.yocoCheckoutId = checkout.id;
+  await saveOrder(order);
+
+  return NextResponse.json({
+    mode: "yoco",
+    redirectUrl: checkout.redirectUrl,
+    checkoutId: checkout.id,
+    orderId: order.id,
+  });
 }

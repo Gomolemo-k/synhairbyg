@@ -12,16 +12,12 @@ const sections = [
     title: "Shipping & Delivery",
     blocks: [
       {
-        heading: "Nationwide courier",
-        body: "We deliver across South Africa via tracked courier. Standard delivery takes 3–7 working days depending on your area. You'll receive a tracking number once your parcel ships.",
+        heading: "PAXI delivery",
+        body: "Every order is shipped via PAXI and delivered to the PEP / PAXI store you choose at checkout. We aim to dispatch within 1–2 working days, and you'll be notified once your parcel arrives at your store. Standard delivery takes 7–9 working days and express 3–5 working days, from dispatch.",
       },
       {
         heading: "Delivery fees",
-        body: "Delivery is R129 flat rate. Orders of R1,500 or more qualify for free delivery. Orders are dispatched within 1–2 working days (excluding weekends and public holidays).",
-      },
-      {
-        heading: "Collection",
-        body: "Prefer to collect? Choose 'Collection' at checkout if you're in the Johannesburg area. We'll confirm a collection slot with you via WhatsApp once your order is ready. Collect in person only after payment has been confirmed.",
+        body: "PAXI delivery is a flat R59.95 (standard bag, up to 5kg) or R109.95 (large bag, up to 10kg) for standard speed. Express delivery is R109.95 (standard bag) or R139.95 (large bag). Orders of R1,500 or more qualify for free delivery.",
       },
     ],
   },
@@ -47,7 +43,7 @@ const sections = [
       },
       {
         heading: "How refunds are processed",
-        body: "Approved refunds are returned to your original payment method (EFT, card, or PayFast balance) within 5–7 working days. PayFast may add its own processing time. Store credits are issued as a gift card balance and never expire.",
+        body: "Approved refunds are returned to your original payment method within 5–7 working days. Store credits are issued as a gift card balance and never expire.",
       },
     ],
   },
@@ -56,12 +52,12 @@ const sections = [
     title: "Payment & Security",
     blocks: [
       {
-        heading: "PayFast checkout",
-        body: "We process payments securely through PayFast, South Africa's leading payment gateway. You can pay by credit/debit card, EFT, Instant EFT, Zapper, Masterpass, or mobile money — whichever suits you.",
+        heading: "Yoco checkout",
+        body: "We process payments securely through Yoco. You can pay with a credit or debit card — payment is processed instantly and your order is confirmed right away.",
       },
       {
         heading: "Your data",
-        body: "We never see or store your full payment details. Card information is handled directly by PayFast over encrypted connections. We only keep the details needed to fulfil your order.",
+        body: "We never see or store your full payment details. Card information is handled directly by Yoco over encrypted connections. We only keep the details needed to fulfil your order.",
       },
       {
         heading: "Order confirmation",

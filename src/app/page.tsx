@@ -92,7 +92,7 @@ export default function HomePage() {
       <section className="border-y border-blush bg-warmwhite">
         <div className="mx-auto grid max-w-7xl grid-cols-2 gap-6 px-4 py-8 text-center text-xs font-semibold uppercase tracking-wide text-plum sm:px-6 md:grid-cols-4 lg:px-8">
           <p>Free delivery over R1,500</p>
-          <p>Secure PayFast checkout</p>
+          <p>Secure Yoco checkout</p>
           <p>Hand-checked quality</p>
           <p>Nationwide courier</p>
         </div>

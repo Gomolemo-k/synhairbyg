@@ -10,7 +10,6 @@ import {
   type ReactNode,
 } from "react";
 import { getProductById, type Product } from "@/lib/products";
-import { FREE_SHIPPING_THRESHOLD, SHIPPING_FLAT_RATE } from "@/lib/products";
 
 export type CartItem = {
   productId: string;
@@ -100,7 +99,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
     return { count, subtotal };
   }, [items]);
 
-  const shipping = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_FLAT_RATE;
+  // Delivery is chosen at checkout (PAXI), so we don't guess a fee here.
+  const shipping = 0;
   const total = subtotal + shipping;
 
   const value: CartContextValue = {

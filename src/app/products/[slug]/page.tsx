@@ -156,11 +156,11 @@ export default async function ProductPage(
             {[
               [
                 "Delivery",
-                "R129 nationwide courier (3–7 working days). Free over R1,500. Collection available in Johannesburg.",
+                "PAXI delivery to your nearest PEP store. Standard R59.95, express R109.95. Free over R1,500.",
               ],
               [
                 "Payments",
-                "Secure checkout via PayFast — cards, EFT, Instant EFT, and mobile money.",
+                "Secure checkout via Yoco — instant payment in seconds.",
               ],
               [
                 "Returns",

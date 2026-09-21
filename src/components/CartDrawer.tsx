@@ -42,7 +42,7 @@ export function QtyStepper({
 }
 
 export default function CartDrawer() {
-  const { items, isOpen, closeCart, subtotal, shipping, total, updateQty, removeItem } =
+  const { items, isOpen, closeCart, subtotal, total, updateQty, removeItem } =
     useCart();
 
   return (
@@ -152,8 +152,8 @@ export default function CartDrawer() {
               </div>
               <div className="flex justify-between">
                 <dt className="text-charcoal/60">Delivery</dt>
-                <dd className="font-semibold">
-                  {shipping === 0 ? <span className="text-gold">Free</span> : formatZAR(shipping)}
+                <dd className="font-semibold text-charcoal/50">
+                  Calculated at checkout
                 </dd>
               </div>
               <div className="flex justify-between border-t border-blush pt-2 text-base">

@@ -2,7 +2,8 @@ import "server-only";
 import { randomBytes } from "crypto";
 import { promises as fs } from "fs";
 import path from "path";
-import pg from "pg";
+import { pool } from "./db";
+import type { PaxiBag, PaxiService } from "./paxiPricing";
 
 export type OrderStatus =
   | "pending"
@@ -13,7 +14,8 @@ export type OrderStatus =
   | "failed"
   | "demo";
 
-export type ShippingMethod = "courier" | "collection";
+export type ShippingMethod = "paxi" | "courier" | "collection";
+export type PaymentProvider = "yoco" | "demo";
 
 export type Order = {
   id: string;
@@ -33,6 +35,13 @@ export type Order = {
     postalCode: string;
     notes?: string;
   };
+  paxi?: {
+    pointCode: string;
+    pointName: string;
+    pointAddress: string;
+    bag: PaxiBag;
+    service: PaxiService;
+  };
   lines: {
     productId: string;
     name: string;
@@ -43,20 +52,10 @@ export type Order = {
   shippingFee: number;
   total: number;
   status: OrderStatus;
-  pfPaymentId?: string;
-  pfToken?: string;
+  paymentProvider?: PaymentProvider;
+  yocoCheckoutId?: string;
+  yocoPaymentId?: string;
 };
-
-const DATABASE_URL = process.env.DATABASE_URL;
-
-const pool = DATABASE_URL
-  ? new pg.Pool({
-      connectionString: DATABASE_URL,
-      ssl: DATABASE_URL.includes("localhost")
-        ? false
-        : { rejectUnauthorized: false },
-    })
-  : null;
 
 const DATA_DIR = path.join(process.cwd(), ".data");
 const ORDERS_FILE = path.join(DATA_DIR, "orders.json");
@@ -75,16 +74,32 @@ export async function saveOrder(order: Order) {
            id, status, customer_first_name, customer_last_name, customer_email,
            customer_phone, shipping_method, shipping_address1, shipping_address2,
            shipping_city, shipping_province, shipping_postal_code, shipping_notes,
-           subtotal, shipping_fee, total, pf_payment_id, pf_token
-         ) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18)
+           delivery_provider, paxi_point_code, paxi_point_name, paxi_point_address,
+paxi_bag, paxi_service, subtotal, shipping_fee, total, payment_provider,
+            yoco_checkout_id, yoco_payment_id
+         ) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25)
          on conflict (id) do update set
            status = excluded.status,
+           shipping_method = excluded.shipping_method,
+           shipping_address1 = excluded.shipping_address1,
+           shipping_address2 = excluded.shipping_address2,
+           shipping_city = excluded.shipping_city,
+           shipping_province = excluded.shipping_province,
+           shipping_postal_code = excluded.shipping_postal_code,
+           shipping_notes = excluded.shipping_notes,
+           delivery_provider = excluded.delivery_provider,
+           paxi_point_code = excluded.paxi_point_code,
+           paxi_point_name = excluded.paxi_point_name,
+           paxi_point_address = excluded.paxi_point_address,
+           paxi_bag = excluded.paxi_bag,
+           paxi_service = excluded.paxi_service,
            subtotal = excluded.subtotal,
            shipping_fee = excluded.shipping_fee,
            total = excluded.total,
-           pf_payment_id = excluded.pf_payment_id,
-           pf_token = excluded.pf_token,
-           updated_at = now()`,
+           payment_provider = coalesce(excluded.payment_provider, orders.payment_provider),
+yoco_checkout_id = coalesce(excluded.yoco_checkout_id, orders.yoco_checkout_id),
+            yoco_payment_id = coalesce(excluded.yoco_payment_id, orders.yoco_payment_id),
+            updated_at = now()`,
         [
           order.id,
           order.status,
@@ -99,11 +114,18 @@ export async function saveOrder(order: Order) {
           order.shipping.province,
           order.shipping.postalCode,
           order.shipping.notes ?? null,
+          order.shipping.method === "paxi" ? "paxi" : order.shipping.method,
+          order.paxi?.pointCode ?? null,
+          order.paxi?.pointName ?? null,
+          order.paxi?.pointAddress ?? null,
+          order.paxi?.bag ?? null,
+          order.paxi?.service ?? null,
           order.subtotal,
           order.shippingFee,
           order.total,
-          order.pfPaymentId ?? null,
-          order.pfToken ?? null,
+          order.paymentProvider ?? "demo",
+          order.yocoCheckoutId ?? null,
+          order.yocoPaymentId ?? null,
         ],
       );
       await client.query("delete from order_items where order_id = $1", [
@@ -153,6 +175,7 @@ function rowToOrder(
   row: Record<string, unknown>,
   items: { wig_id: string | null; name: string; qty: number; price: string }[],
 ): Order {
+  const method = row.shipping_method as ShippingMethod;
   return {
     id: String(row.id),
     createdAt: new Date(row.created_at as string).toISOString(),
@@ -163,7 +186,7 @@ function rowToOrder(
       phone: String(row.customer_phone ?? ""),
     },
     shipping: {
-      method: row.shipping_method as ShippingMethod,
+      method,
       address1: String(row.shipping_address1 ?? ""),
       address2: String(row.shipping_address2 ?? ""),
       city: String(row.shipping_city ?? ""),
@@ -171,6 +194,16 @@ function rowToOrder(
       postalCode: String(row.shipping_postal_code ?? ""),
       notes: String(row.shipping_notes ?? ""),
     },
+    paxi:
+      method === "paxi" && row.paxi_point_code
+        ? {
+            pointCode: String(row.paxi_point_code),
+            pointName: String(row.paxi_point_name ?? ""),
+            pointAddress: String(row.paxi_point_address ?? ""),
+            bag: (row.paxi_bag as PaxiBag) ?? "standard",
+            service: (row.paxi_service as PaxiService) ?? "standard",
+          }
+        : undefined,
     lines: items.map((i) => ({
       productId: i.wig_id ?? "",
       name: i.name,
@@ -181,8 +214,15 @@ function rowToOrder(
     shippingFee: Number(row.shipping_fee),
     total: Number(row.total),
     status: row.status as OrderStatus,
-    pfPaymentId: row.pf_payment_id ? String(row.pf_payment_id) : undefined,
-    pfToken: row.pf_token ? String(row.pf_token) : undefined,
+    paymentProvider: row.payment_provider
+      ? (row.payment_provider as PaymentProvider)
+      : undefined,
+    yocoCheckoutId: row.yoco_checkout_id
+      ? String(row.yoco_checkout_id)
+      : undefined,
+    yocoPaymentId: row.yoco_payment_id
+      ? String(row.yoco_payment_id)
+      : undefined,
   };
 }
 
