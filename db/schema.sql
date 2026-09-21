@@ -95,8 +95,8 @@ create table if not exists orders (
   id                  text primary key,     -- SYN-2026-XXXX
   status              text not null default 'pending'
                         check (status in (
-                          'pending','paid','complete',
-                          'delivered','cancelled','failed','demo'
+                          'pending','paid','packed','sent',
+                          'complete','delivered','cancelled','failed','demo'
                         )),
   user_id             uuid references users(id) on delete set null,
   customer_first_name text not null,
@@ -142,6 +142,16 @@ alter table orders drop column if exists pf_payment_id;
 alter table orders drop column if exists pf_token;
 alter table orders alter column payment_provider set default 'demo';
 
+-- Widen the order status check to include the PAXI fulfilment steps.
+do $$
+begin
+  if exists (select 1 from pg_constraint where conname = 'orders_status_check') then
+    alter table orders drop constraint orders_status_check;
+  end if;
+end $$;
+alter table orders add constraint orders_status_check
+  check (status in ('pending','paid','packed','sent','complete','delivered','cancelled','failed','demo'));
+
 -- Backfill delivery_provider from the legacy shipping_method column.
 update orders
    set delivery_provider = shipping_method
@@ -165,6 +175,18 @@ create table if not exists webhook_deliveries (
   event_type text,
   created_at timestamptz not null default now()
 );
+
+-- --- sessions --------------------------------------------------------------
+-- Signed-in customer sessions. The cookie holds a random token; only its
+-- SHA-256 hash is stored here so a DB leak can't be replayed elsewhere.
+create table if not exists sessions (
+  token_hash text primary key,
+  user_id    uuid not null references users(id) on delete cascade,
+  created_at timestamptz not null default now(),
+  expires_at timestamptz not null
+);
+create index if not exists idx_sessions_user on sessions (user_id);
+create index if not exists idx_sessions_expires on sessions (expires_at);
 
 -- --- order items ----------------------------------------------------------
 create table if not exists order_items (
@@ -232,6 +254,7 @@ create index if not exists idx_wigs_collection    on wigs (collection_id);
 create index if not exists idx_wigs_featured      on wigs (featured);
 create index if not exists idx_orders_status      on orders (status);
 create index if not exists idx_orders_customer    on orders (customer_email);
+create index if not exists idx_orders_user        on orders (user_id);
 create index if not exists idx_order_items_order  on order_items (order_id);
 create index if not exists idx_cart_items_wig     on cart_items (wig_id);
 create index if not exists idx_contact_created    on contact_messages (created_at);

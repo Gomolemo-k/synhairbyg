@@ -53,7 +53,7 @@ export async function listPaxiPoints(options?: {
   const where: string[] = ["active = true"];
   const add = (value: unknown, clause: string) => {
     params.push(value);
-    where.push(clause.replace("$N", `$${params.length}`));
+    where.push(clause.replaceAll("$N", `$${params.length}`));
   };
 
   if (options?.province) add(options.province, "province = $N");

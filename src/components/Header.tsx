@@ -11,6 +11,8 @@ export default function Header() {
   const nav = [
     { href: "/shop", label: "Shop Wigs" },
     { href: "/collections", label: "Collections" },
+    { href: "/track", label: "Track" },
+    { href: "/account", label: "Account" },
     { href: "/about", label: "About" },
     { href: "/contact", label: "Contact" },
     { href: "/policies", label: "Policies" },

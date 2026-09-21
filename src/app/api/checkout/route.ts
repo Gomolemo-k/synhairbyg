@@ -9,6 +9,7 @@ import {
 import { getPaxiFee, type PaxiBag, type PaxiService } from "@/lib/paxiPricing";
 import { createYocoCheckout, YocoError, yocoConfigured } from "@/lib/yoco";
 import { getPaxiPoint } from "@/lib/paxiPoints";
+import { getSessionUser } from "@/lib/auth";
 
 export const runtime = "nodejs";
 
@@ -129,10 +130,12 @@ export async function POST(req: Request) {
   const subtotal = lines.reduce((sum, l) => sum + l.price * l.qty, 0);
   const total = subtotal + shippingFee;
   const paid = yocoConfigured;
+  const user = await getSessionUser();
 
   const order: Order = {
     id: createOrderId(),
     createdAt: new Date().toISOString(),
+    userId: user?.id,
     customer: body.customer,
     shipping: {
       method,

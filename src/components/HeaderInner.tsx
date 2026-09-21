@@ -58,6 +58,7 @@ export default function HeaderInner({ open, setOpen }: { open: boolean; setOpen:
   const nav = [
     { href: "/shop", label: "Shop Wigs" },
     { href: "/collections", label: "Collections" },
+    { href: "/track", label: "Track" },
     { href: "/about", label: "About" },
     { href: "/contact", label: "Contact" },
   ];
@@ -84,6 +85,24 @@ export default function HeaderInner({ open, setOpen }: { open: boolean; setOpen:
       </nav>
 
       <div className="flex items-center gap-2">
+        <Link
+          href="/account"
+          aria-label="My account"
+          className="flex h-10 w-10 items-center justify-center rounded-full border border-plum/25 text-plum transition hover:bg-blush"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            className="h-5 w-5"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+        </Link>
         <CartToggle />
         <MobileMenuToggle open={open} setOpen={setOpen} />
       </div>

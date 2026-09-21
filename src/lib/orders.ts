@@ -8,6 +8,8 @@ import type { PaxiBag, PaxiService } from "./paxiPricing";
 export type OrderStatus =
   | "pending"
   | "paid"
+  | "packed"
+  | "sent"
   | "complete"
   | "delivered"
   | "cancelled"
@@ -20,6 +22,7 @@ export type PaymentProvider = "yoco" | "demo";
 export type Order = {
   id: string;
   createdAt: string;
+  userId?: string;
   customer: {
     firstName: string;
     lastName: string;
@@ -71,15 +74,16 @@ export async function saveOrder(order: Order) {
       await client.query("begin");
       await client.query(
         `insert into orders (
-           id, status, customer_first_name, customer_last_name, customer_email,
+           id, user_id, status, customer_first_name, customer_last_name, customer_email,
            customer_phone, shipping_method, shipping_address1, shipping_address2,
            shipping_city, shipping_province, shipping_postal_code, shipping_notes,
            delivery_provider, paxi_point_code, paxi_point_name, paxi_point_address,
-paxi_bag, paxi_service, subtotal, shipping_fee, total, payment_provider,
-            yoco_checkout_id, yoco_payment_id
-         ) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25)
+           paxi_bag, paxi_service, subtotal, shipping_fee, total, payment_provider,
+           yoco_checkout_id, yoco_payment_id
+         ) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26)
          on conflict (id) do update set
            status = excluded.status,
+           user_id = coalesce(excluded.user_id, orders.user_id),
            shipping_method = excluded.shipping_method,
            shipping_address1 = excluded.shipping_address1,
            shipping_address2 = excluded.shipping_address2,
@@ -102,6 +106,7 @@ yoco_checkout_id = coalesce(excluded.yoco_checkout_id, orders.yoco_checkout_id),
             updated_at = now()`,
         [
           order.id,
+          order.userId ?? null,
           order.status,
           order.customer.firstName,
           order.customer.lastName,
@@ -179,6 +184,7 @@ function rowToOrder(
   return {
     id: String(row.id),
     createdAt: new Date(row.created_at as string).toISOString(),
+    userId: row.user_id ? String(row.user_id) : undefined,
     customer: {
       firstName: String(row.customer_first_name),
       lastName: String(row.customer_last_name),
@@ -244,6 +250,53 @@ export async function loadOrder(id: string): Promise<Order | undefined> {
   } catch {
     return undefined;
   }
+}
+
+async function loadOrdersWith(
+  whereSql: string,
+  params: unknown[],
+): Promise<Order[]> {
+  if (!pool) return [];
+  const res = await pool.query(
+    `select * from orders ${whereSql} order by created_at desc`,
+    params,
+  );
+  const rows = res.rows;
+  if (rows.length === 0) return [];
+  const ids = rows.map((r) => r.id);
+  const items = await pool.query(
+    "select * from order_items where order_id = any($1::text[])",
+    [ids],
+  );
+  const byOrder = new Map<string, typeof items.rows>();
+  for (const row of items.rows) {
+    const key = String(row.order_id);
+    const list = byOrder.get(key) ?? [];
+    list.push(row);
+    byOrder.set(key, list);
+  }
+  return rows.map((row) => rowToOrder(row, byOrder.get(row.id) ?? []));
+}
+
+export async function loadOrdersByUser(userId: string): Promise<Order[]> {
+  if (!pool) return [];
+  return loadOrdersWith("where user_id = $1", [userId]);
+}
+
+export async function loadAllOrders(): Promise<Order[]> {
+  return loadOrdersWith("", []);
+}
+
+export async function updateOrderStatus(
+  id: string,
+  status: OrderStatus,
+): Promise<boolean> {
+  if (!pool) return false;
+  const res = await pool.query(
+    "update orders set status = $2, updated_at = now() where id = $1",
+    [id, status],
+  );
+  return (res.rowCount ?? 0) > 0;
 }
 
 export function createOrderId() {

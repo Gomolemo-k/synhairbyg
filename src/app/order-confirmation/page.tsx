@@ -5,16 +5,8 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import type { Order } from "@/lib/orders";
 import { formatZAR } from "@/lib/format";
-
-const statusLabels: Record<Order["status"], string> = {
-  pending: "Payment pending",
-  paid: "Payment received",
-  complete: "Complete",
-  delivered: "Delivered",
-  cancelled: "Cancelled",
-  failed: "Payment failed",
-  demo: "Order placed (demo)",
-};
+import { STATUS_LABELS, stepIndex } from "@/lib/tracking";
+import OrderStatusTimeline from "@/components/OrderStatusTimeline";
 
 function OrderConfirmationContent() {
   const searchParams = useSearchParams();
@@ -91,12 +83,12 @@ function OrderConfirmationContent() {
               Order <span className="font-bold">{order.id}</span> ·{" "}
               <span
                 className={
-                  order.status === "paid" || order.status === "complete"
+                  stepIndex(order.status) >= 1 || order.status === "complete"
                     ? "font-semibold text-plum"
                     : "font-semibold text-gold"
                 }
               >
-                {statusLabels[order.status]}
+                {STATUS_LABELS[order.status]}
               </span>
             </p>
           </div>
@@ -183,25 +175,57 @@ function OrderConfirmationContent() {
             </div>
           </div>
 
+          {stepIndex(order.status) >= 1 && (
+            <div className="mt-6 rounded-2xl bg-blush/30 p-6 sm:p-8">
+              <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+                <h2 className="font-display text-2xl text-plum">
+                  Track your package
+                </h2>
+                <Link
+                  href={`/track?order=${encodeURIComponent(order.id)}`}
+                  className="rounded-full bg-plum px-5 py-2.5 text-sm font-semibold text-warmwhite transition hover:bg-rose"
+                >
+                  Track →
+                </Link>
+              </div>
+              <OrderStatusTimeline status={order.status} />
+            </div>
+          )}
+
           <div className="mt-8 rounded-2xl bg-plum p-6 text-center text-warmwhite">
             <p className="font-display text-xl">What happens next?</p>
             <p className="mt-2 text-sm text-warmwhite/75">
-              {order.shipping.method === "paxi" && order.paxi ? (
-                order.status === "paid" || order.status === "complete" ? (
+              {stepIndex(order.status) >= 2 ? (
+                order.paxi ? (
                   <>
-                    We&apos;re packing your crown — your order ships to{" "}
-                    <span className="font-semibold">{order.paxi.pointName}</span>{" "}
-                    via PAXI {order.paxi.service === "express"
-                      ? "Express (3–5 business days)"
-                      : "(7–9 business days)"}.
+                    Your wig is on its way to{" "}
+                    <span className="font-semibold">
+                      {order.paxi.pointName}
+                    </span>
+                    . We&apos;ll send you an SMS once it&apos;s ready to
+                    collect. Bring your ID when you pick it up.
                   </>
                 ) : (
-                  "Once payment confirms, your order ships to your chosen PEP store and you'll get an SMS when it's ready to collect."
+                  "Your order is on its way. You'll be notified once it's ready to collect."
                 )
-              ) : order.status === "paid" || order.status === "complete" ? (
-                "We're packing your crown — dispatch happens within 1–2 working days and your tracking number lands on WhatsApp."
+              ) : order.status === "paid" ? (
+                order.paxi ? (
+                  <>
+                    We&apos;re packing your crown — your order ships to{" "}
+                    <span className="font-semibold">
+                      {order.paxi.pointName}
+                    </span>{" "}
+                    via PAXI{" "}
+                    {order.paxi.service === "express"
+                      ? "Express (3–5 business days)"
+                      : "Standard (7–9 business days)"}
+                    .
+                  </>
+                ) : (
+                  "We're packing your crown — dispatch happens within 1–2 working days."
+                )
               ) : (
-                "Once payment confirms, we'll WhatsApp your tracking number. Need help? Message +27 82 000 0000."
+                "Once payment confirms, we'll pack your order and ship it to your chosen PAXI store. Track it above or from your account."
               )}
             </p>
           </div>
