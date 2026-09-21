@@ -69,6 +69,27 @@ create table if not exists wig_images (
   created_at timestamptz not null default now()
 );
 
+-- --- PAXI points ----------------------------------------------------------
+-- PAXI has no public rate/shipment API. We keep our own list of PAXI points
+-- (PEP, PEPhome, Tekkie Town, Shoe City stores) so customers can pick their
+-- nearest collection point. Replace/extend this with PAXI's official store
+-- list once you have API access.
+create table if not exists paxi_points (
+  id           bigint generated always as identity primary key,
+  code         text not null unique,       -- unique PAXI point code (6 digits)
+  name         text not null,              -- store name shown to customers
+  brand        text not null default 'PEP',
+  address      text,
+  suburb       text,
+  city         text not null,
+  province     text not null,
+  postal_code  text,
+  lat          double precision,
+  lng          double precision,
+  active       boolean not null default true,
+  created_at   timestamptz not null default now()
+);
+
 -- --- orders ---------------------------------------------------------------
 create table if not exists orders (
   id                  text primary key,     -- SYN-2026-XXXX
@@ -82,21 +103,67 @@ create table if not exists orders (
   customer_last_name  text not null,
   customer_email      text not null,
   customer_phone      text,
-  shipping_method     text not null
-                        check (shipping_method in ('courier','collection')),
+  shipping_method     text not null default 'collection',
   shipping_address1   text,
   shipping_address2   text,
   shipping_city       text,
   shipping_province   text,
   shipping_postal_code text,
   shipping_notes      text,
+  delivery_provider   text not null default 'courier',
+  paxi_point_code     text,
+  paxi_point_name     text,
+  paxi_point_address  text,
+  paxi_bag            text,
+  paxi_service        text,
   subtotal            numeric(10,2) not null default 0,
   shipping_fee        numeric(10,2) not null default 0,
   total               numeric(10,2) not null default 0,
-  pf_payment_id       text,
-  pf_token            text,
+  payment_provider    text not null default 'demo',
+  yoco_checkout_id    text,
+  yoco_payment_id     text,
   created_at          timestamptz not null default now(),
   updated_at          timestamptz not null default now()
+);
+
+-- Idempotent upgrades for databases created from an earlier schema.
+alter table orders add column if not exists delivery_provider  text not null default 'courier';
+alter table orders add column if not exists paxi_point_code    text;
+alter table orders add column if not exists paxi_point_name    text;
+alter table orders add column if not exists paxi_point_address text;
+alter table orders add column if not exists paxi_bag           text;
+alter table orders add column if not exists paxi_service       text;
+alter table orders add column if not exists payment_provider   text not null default 'demo';
+alter table orders add column if not exists yoco_checkout_id   text;
+alter table orders add column if not exists yoco_payment_id    text;
+
+-- Retired legacy payment columns and normalise the provider default.
+alter table orders drop column if exists pf_payment_id;
+alter table orders drop column if exists pf_token;
+alter table orders alter column payment_provider set default 'demo';
+
+-- Backfill delivery_provider from the legacy shipping_method column.
+update orders
+   set delivery_provider = shipping_method
+ where delivery_provider = 'courier'
+   and shipping_method in ('courier', 'collection');
+
+-- Widen the shipping_method check to include PAXI.
+do $$
+begin
+  if exists (select 1 from pg_constraint where conname = 'orders_shipping_method_check') then
+    alter table orders drop constraint orders_shipping_method_check;
+  end if;
+end $$;
+alter table orders add constraint orders_shipping_method_check
+  check (shipping_method in ('courier','collection','paxi'));
+
+-- Webhook deliveries processed (dedupes Yoco event retries).
+create table if not exists webhook_deliveries (
+  id         text primary key,             -- the webhook-id header
+  provider   text not null default 'yoco',
+  event_type text,
+  created_at timestamptz not null default now()
 );
 
 -- --- order items ----------------------------------------------------------
@@ -168,5 +235,8 @@ create index if not exists idx_orders_customer    on orders (customer_email);
 create index if not exists idx_order_items_order  on order_items (order_id);
 create index if not exists idx_cart_items_wig     on cart_items (wig_id);
 create index if not exists idx_contact_created    on contact_messages (created_at);
+create index if not exists idx_paxi_points_city    on paxi_points (city);
+create index if not exists idx_paxi_points_province on paxi_points (province);
+create index if not exists idx_paxi_points_active  on paxi_points (active);
 
 commit;

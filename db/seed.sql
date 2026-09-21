@@ -117,4 +117,68 @@ on conflict (id) do update set
   gradient_from = excluded.gradient_from,
   gradient_to = excluded.gradient_to;
 
+-- PAXI collection points (PEP stores). Placeholder dataset for checkout --
+-- until SynHair gets PAXI API access; codes are examples, replace with the
+-- official PAXI store list (https://map.paxi.co.za) when available.
+insert into paxi_points (code, name, brand, address, suburb, city, province, postal_code, lat, lng) values
+  -- Gauteng
+  ('134815', 'PEP Sandton City',        'PEP',       'Corner Rivonia & West Street', 'Sandton',          'Sandton',          'Gauteng', '2196', -26.1076, 28.0567),
+  ('134820', 'PEPhome Midrand',         'PEPhome',   '5 Barnes Street',              'Midrand',          'Midrand',          'Gauteng', '1685', -25.9974, 28.1283),
+  ('134831', 'PEP Soweto Maponya Mall', 'PEP',       'Maponya Mall, Old Potch Road', 'Soweto',           'Soweto',           'Gauteng', '1809', -26.2653, 27.9000),
+  ('134844', 'PEP Pretoria Sunnyside',  'PEP',       'Corner Esselen & Mears Street','Sunnyside',        'Pretoria',         'Gauteng', '0002', -25.7556, 28.2103),
+  ('134858', 'PEP Eastgate Mall',       'PEP',       '43 Bradford Road',             'Bedfordview',      'Bedfordview',      'Gauteng', '2007', -26.1780, 28.1320),
+  ('134863', 'Tekkie Town Randburg',    'Tekkie Town','15 Bram Fischer Drive',       'Randburg',         'Randburg',         'Gauteng', '2194', -26.0990, 28.0140),
+  -- KwaZulu-Natal
+  ('147302', 'PEP Durban CBD',          'PEP',       '12 West Street',               'Durban Central',   'Durban',           'KwaZulu-Natal', '4001', -29.8587, 31.0218),
+  ('147311', 'PEP Umhlanga Gateway',    'PEP',       'Gateway Mall, 1 Palm Blvd',    'Umhlanga',         'Umhlanga',         'KwaZulu-Natal', '4319', -29.7220, 31.0700),
+  ('147325', 'PEP Pietermaritzburg',    'PEP',       'Church Street Mall',           'Pietermaritzburg', 'Pietermaritzburg', 'KwaZulu-Natal', '3201', -29.6006, 30.3793),
+  ('147339', 'PEP Richmond',            'PEP',       '20 Shepstone Road',            'Richmond',         'Richmond',         'KwaZulu-Natal', '3780', -29.8717, 30.2728),
+  ('147344', 'PEP Newcastle',           'PEP',       '126 Scott Street',             'Newcastle',        'Newcastle',        'KwaZulu-Natal', '2940', -27.7580, 29.9318),
+  -- Western Cape
+  ('158204', 'PEP Cape Town CBD',       'PEP',       '91 Long Street',               'Cape Town CBD',    'Cape Town',        'Western Cape', '8001', -33.9249, 18.4241),
+  ('158218', 'PEP Khayelitsha',         'PEP',       'Site C Shopping Centre',       'Khayelitsha',      'Cape Town',        'Western Cape', '7784', -34.0618, 18.5860),
+  ('158226', 'PEP Bellville',           'PEP',       'Jean Simonis Centre, Voortrekker Rd', 'Bellville', 'Cape Town',        'Western Cape', '7530', -33.9033, 18.6345),
+  ('158233', 'PEP Paarl',               'PEP',       '1 Lady Grey Street',           'Paarl',            'Paarl',            'Western Cape', '7646', -33.7406, 18.9677),
+  ('158247', 'PEP George',              'PEP',       'Hibernia Street',              'George',           'George',           'Western Cape', '6529', -33.9686, 22.4590),
+  -- Eastern Cape
+  ('165901', 'PEP Gqeberha CBD',        'PEP',       '63 Govan Mbeki Avenue',        'Central',          'Gqeberha',         'Eastern Cape', '6001', -33.9582, 25.6009),
+  ('165915', 'PEP East London',         'PEP',       'Oxford Street',                'Quigney',          'East London',      'Eastern Cape', '5201', -33.0138, 27.9117),
+  ('165926', 'PEP Mthatha',             'PEP',       'Corner Madeira & Errol Street','Mthatha Central',  'Mthatha',          'Eastern Cape', '5099', -31.5889, 28.7934),
+  ('165938', 'PEP King Williams Town',  'PEP',       '8 Cambridge Road',             'King William''s Town', 'King William''s Town', 'Eastern Cape', '5600', -32.8788, 27.3947),
+  -- Free State
+  ('176312', 'PEP Bloemfontein CBD',    'PEP',       '22 Main Street',               'Bloemfontein CBD', 'Bloemfontein',     'Free State', '9301', -29.1135, 26.2186),
+  ('176327', 'PEP Welkom',              'PEP',       'Stateway Road',                'Welkom',           'Welkom',           'Free State', '9459', -27.9774, 26.7351),
+  ('176335', 'PEP Bethlehem',           'PEP',       '20 Muller Street',             'Bethlehem',        'Bethlehem',        'Free State', '9701', -28.2308, 28.3027),
+  ('176340', 'PEP Sasolburg',           'PEP',       '43 Kerk Street',               'Sasolburg',        'Sasolburg',        'Free State', '1947', -26.8135, 27.8179),
+  -- Limpopo
+  ('187421', 'PEP Polokwane CBD',       'PEP',       'Corner Grobler & Landdros',    'Polokwane CBD',    'Polokwane',        'Limpopo', '0699', -23.9046, 29.4688),
+  ('187436', 'PEP Tzaneen',             'PEP',       '24 Danie Joubert Street',      'Tzaneen',          'Tzaneen',          'Limpopo', '0850', -23.8312, 30.1635),
+  ('187440', 'PEP Thohoyandou',         'PEP',       'P& B Plaza, 101 Old Thavhani Rd','Thohoyandou',    'Thohoyandou',      'Limpopo', '0950', -22.9487, 30.4855),
+  ('187454', 'PEP Mokopane',            'PEP',       '37 Thabo Mbeki Street',        'Mokopane',         'Mokopane',         'Limpopo', '0600', -24.1944, 29.0097),
+  -- Mpumalanga
+  ('192807', 'PEP Nelspruit CBD',       'PEP',       '35 Brown Street',              'Mbombela',         'Nelspruit',        'Mpumalanga', '1200', -25.4652, 30.9856),
+  ('192813', 'PEP Witbank',             'PEP',       'Corner Beatty & Mandela St',   'Witbank',          'eMalahleni',       'Mpumalanga', '1035', -25.8432, 29.2145),
+  ('192826', 'PEP Middelburg',          'PEP',       '46 Church Street',             'Middelburg',       'Middelburg',       'Mpumalanga', '1050', -25.7749, 29.4716),
+  ('192839', 'PEP Sabie',               'PEP',       'Main Road',                    'Sabie',            'Sabie',            'Mpumalanga', '1260', -25.0995, 30.7799),
+  -- North West
+  ('204515', 'PEP Rustenburg',          'PEP',       'Sarel Cilliers Street',        'Rustenburg',       'Rustenburg',       'North West', '0300', -25.6691, 27.2439),
+  ('204520', 'PEP Klerksdorp',          'PEP',       'Florentia Avenue',             'Klerksdorp',       'Klerksdorp',       'North West', '2570', -26.8621, 26.6659),
+  ('204534', 'PEP Mmabatho',            'PEP',       'Provincial Government Complex','Mmabatho',         'Mahikeng',         'North West', '2735', -25.8039, 25.5604),
+  ('204548', 'PEP Brits',               'PEP',       'Corner R511 & Reservoir',      'Brits',            'Brits',            'North West', '0250', -25.6352, 27.7816),
+  -- Northern Cape
+  ('213681', 'PEP Kimberley CBD',       'PEP',       '7 Dutoitspan Road',            'Kimberley CBD',    'Kimberley',        'Northern Cape', '8300', -28.7419, 24.7719),
+  ('213695', 'PEP Upington',            'PEP',       '12 Scott Street',              'Upington',         'Upington',         'Northern Cape', '8801', -28.4572, 21.2425),
+  ('213704', 'PEP Kuruman',             'PEP',       'Corner Main & Kus Street',     'Kuruman',          'Kuruman',          'Northern Cape', '8460', -27.4524, 23.4324)
+on conflict (code) do update set
+  name      = excluded.name,
+  brand     = excluded.brand,
+  address   = excluded.address,
+  suburb    = excluded.suburb,
+  city      = excluded.city,
+  province  = excluded.province,
+  postal_code = excluded.postal_code,
+  lat       = excluded.lat,
+  lng       = excluded.lng,
+  active    = true;
+
 commit;
