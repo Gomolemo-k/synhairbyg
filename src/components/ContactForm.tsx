@@ -24,7 +24,7 @@ export default function ContactForm() {
       }),
     );
     window.location.assign(
-      `mailto:hello@synhairbyg.com?subject=${subject}&body=${body}`,
+      `mailto:synhairbyg@gmail.com?subject=${subject}&body=${body}`,
     );
     setSent(true);
   };
