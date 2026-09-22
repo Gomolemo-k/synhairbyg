@@ -72,7 +72,7 @@ export default function HeaderInner({ open, setOpen }: { open: boolean; setOpen:
     <div className="flex items-center justify-between">
       <Link
         href="/"
-        className="font-display text-2xl font-semibold tracking-wide text-plum transition hover:text-rose md:text-3xl"
+        className="whitespace-nowrap font-display text-2xl font-semibold text-plum transition hover:text-rose md:text-3xl"
       >
         Syn<span className="text-gold">Hair</span>byG
       </Link>

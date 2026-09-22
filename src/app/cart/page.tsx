@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useCart } from "@/components/CartProvider";
 import { QtyStepper } from "@/components/CartDrawer";
 import ProductArt from "@/components/ProductArt";
-import { getProductById, FREE_SHIPPING_THRESHOLD } from "@/lib/products";
+import { getProductById } from "@/lib/products";
 import { formatZAR } from "@/lib/format";
 import { translator } from "@/lib/i18n";
 
@@ -28,24 +28,9 @@ export default function CartPage() {
     );
   }
 
-  const remaining = Math.max(0, FREE_SHIPPING_THRESHOLD - subtotal);
-
   return (
     <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8">
       <h1 className="font-display text-4xl text-plum">{t("title")}</h1>
-
-      <div className="mt-4 rounded-full bg-blush px-5 py-3 text-sm text-plum">
-        {shipping === 0 ? (
-          <>
-            {t("unlockPre")}<span className="font-bold">{t("unlockBold")}</span>{t("unlockPost")}
-          </>
-        ) : (
-          <>
-            {t("addPre")}<span className="font-bold">{t("addBoldAmount", { amount: formatZAR(remaining) })}</span>
-            {t("addMid")}<span className="font-bold">{t("addBoldFree")}</span>{t("addPost")}
-          </>
-        )}
-      </div>
 
       <div className="mt-8 grid gap-10 lg:grid-cols-[1fr_360px]">
         <ul className="divide-y divide-blush border-y border-blush">
@@ -113,13 +98,7 @@ export default function CartPage() {
             </div>
             <div className="flex justify-between">
               <dt className="text-charcoal/60">{tc("delivery")}</dt>
-              <dd className="font-semibold">
-                {shipping === 0 ? (
-                  <span className="text-gold">{tc("free")}</span>
-                ) : (
-                  formatZAR(shipping)
-                )}
-              </dd>
+              <dd className="font-semibold">{formatZAR(shipping)}</dd>
             </div>
             <div className="flex justify-between border-t border-blush pt-3 text-base">
               <dt className="font-semibold">{tc("total")}</dt>

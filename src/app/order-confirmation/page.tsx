@@ -136,7 +136,7 @@ function OrderConfirmationContent() {
               </div>
               <div className="flex justify-between">
                 <dt className="text-charcoal/60">{tc("delivery")}</dt>
-                <dd>{order.shippingFee === 0 ? tc("free") : formatZAR(order.shippingFee)}</dd>
+                <dd>{formatZAR(order.shippingFee)}</dd>
               </div>
               <div className="flex justify-between border-t border-blush pt-2 font-semibold">
                 <dt>{tc("total")}</dt>

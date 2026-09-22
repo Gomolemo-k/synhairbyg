@@ -63,9 +63,9 @@ export default function HomePage() {
                 </p>
               </div>
               <div>
-                <p className="font-display text-3xl text-plum">{t("statFreeDelivery")}</p>
+                <p className="font-display text-3xl text-plum">{t("statReply")}</p>
                 <p className="text-xs uppercase tracking-wide text-charcoal/50">
-                  {t("statFreeDeliveryLabel")}
+                  {t("statReplyLabel")}
                 </p>
               </div>
             </div>
@@ -99,8 +99,7 @@ export default function HomePage() {
       </section>
 
       <section className="border-y border-blush bg-warmwhite">
-        <div className="mx-auto grid max-w-7xl grid-cols-2 gap-6 px-4 py-8 text-center text-xs font-semibold uppercase tracking-wide text-plum sm:px-6 md:grid-cols-4 lg:px-8">
-          <p>{tc("freeDelivery")}</p>
+        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 px-4 py-8 text-center text-xs font-semibold uppercase tracking-wide text-plum sm:grid-cols-3 sm:px-6 lg:px-8">
           <p>{tc("secureYoco")}</p>
           <p>{t("marqueeQuality")}</p>
           <p>{t("marqueeNationwide")}</p>

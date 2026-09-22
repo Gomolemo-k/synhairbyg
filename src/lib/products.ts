@@ -353,6 +353,3 @@ export function getProductsByCollection(slug: CollectionSlug) {
 }
 
 export const FEATURED = products.filter((p) => p.featured);
-
-export const FREE_SHIPPING_THRESHOLD = 1500;
-export const SHIPPING_FLAT_RATE = 129;

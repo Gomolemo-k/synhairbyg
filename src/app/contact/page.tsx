@@ -11,9 +11,15 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   const t = translator("contact");
+  const tc = translator("common");
 
   const details = [
-    { label: t("emailLabel"), value: t("emailValue"), note: t("emailNote") },
+    {
+      label: t("emailLabel"),
+      value: t("emailValue"),
+      note: t("emailNote"),
+      href: `mailto:${t("emailValue")}`,
+    },
     {
       label: t("whatsappLabel"),
       value: t("whatsappValue"),
@@ -23,11 +29,13 @@ export default function ContactPage() {
       label: t("instagramLabel"),
       value: t("instagramValue"),
       note: t("instagramNote"),
+      href: tc("instagramUrl"),
     },
     {
-      label: t("locationLabel"),
-      value: t("locationValue"),
-      note: t("locationNote"),
+      label: t("tiktokLabel"),
+      value: t("tiktokValue"),
+      note: t("tiktokNote"),
+      href: tc("tiktokUrl"),
     },
   ];
 
@@ -53,10 +61,28 @@ export default function ContactPage() {
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-gold">
                 {detail.label}
               </p>
-              <p className="mt-2 font-semibold text-charcoal">{detail.value}</p>
+              {detail.href ? (
+                <a
+                  href={detail.href}
+                  className="mt-2 inline-block font-semibold text-charcoal underline decoration-gold decoration-2 underline-offset-4 transition hover:text-rose"
+                >
+                  {detail.value}
+                </a>
+              ) : (
+                <p className="mt-2 font-semibold text-charcoal">{detail.value}</p>
+              )}
               <p className="mt-1 text-xs text-charcoal/50">{detail.note}</p>
             </div>
           ))}
+
+          <div className="rounded-2xl border border-blush bg-warmwhite p-6 sm:col-span-2">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-gold">
+              {t("hoursLabel")}
+            </p>
+            <p className="mt-2 font-semibold text-charcoal">{t("hoursWeekdays")}</p>
+            <p className="font-semibold text-charcoal">{t("hoursWeekends")}</p>
+            <p className="mt-1 text-xs text-charcoal/50">{t("hoursCallsNote")}</p>
+          </div>
 
           <div className="rounded-2xl bg-plum p-6 text-warmwhite sm:col-span-2">
             <p className="font-display text-xl italic">{t("quote")}</p>
