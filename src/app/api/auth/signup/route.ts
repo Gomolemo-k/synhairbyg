@@ -49,7 +49,8 @@ export async function POST(req: NextRequest) {
   let result;
   try {
     result = await createUser({ name, email, password, role });
-  } catch {
+  } catch (err) {
+    console.error("Signup failed to create user:", err);
     return NextResponse.json(
       { error: "Could not create your account. Please try again." },
       { status: 500 },
