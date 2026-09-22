@@ -5,10 +5,13 @@ import { loadOrdersByUser } from "@/lib/orders";
 import { STATUS_LABELS } from "@/lib/tracking";
 import { formatZAR } from "@/lib/format";
 import SignOutButton from "@/components/SignOutButton";
+import { translator } from "@/lib/i18n";
 
 export const dynamic = "force-dynamic";
 
 export default async function AccountPage() {
+  const t = translator("account");
+  const tt = translator("tracking");
   const user = await getSessionUser();
   if (!user) redirect("/sign-in");
 
@@ -18,10 +21,9 @@ export default async function AccountPage() {
     <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="font-display text-4xl text-plum">My Account</h1>
+          <h1 className="font-display text-4xl text-plum">{t("title")}</h1>
           <p className="mt-2 text-sm text-charcoal/60">
-            Hi, <span className="font-semibold text-charcoal">{user.name}</span>{" "}
-            — welcome back.
+            {t("welcome", { name: user.name })}
           </p>
         </div>
         <SignOutButton />
@@ -32,18 +34,18 @@ export default async function AccountPage() {
           href="/admin"
           className="mt-6 inline-block rounded-full bg-gold/15 px-6 py-2.5 text-sm font-bold text-gold transition hover:bg-gold/25"
         >
-          Admin dashboard →
+          {t("adminLink")}
         </Link>
       )}
 
       <div className="mt-10">
         <div className="flex items-center justify-between">
-          <h2 className="font-display text-2xl text-plum">Order history</h2>
+          <h2 className="font-display text-2xl text-plum">{t("orderHistory")}</h2>
           <Link
             href="/track"
             className="text-sm font-semibold text-plum underline decoration-gold decoration-2 underline-offset-4"
           >
-            Track a package
+            {t("trackPackage")}
           </Link>
         </div>
 
@@ -51,17 +53,16 @@ export default async function AccountPage() {
           <div className="mt-6 rounded-2xl border border-blush bg-warmwhite p-10 text-center">
             <p className="text-3xl">🛍️</p>
             <h3 className="mt-3 font-display text-xl text-plum">
-              No orders yet
+              {t("noOrdersTitle")}
             </h3>
             <p className="mx-auto mt-2 max-w-sm text-sm text-charcoal/60">
-              Once you place an order while signed in, it&apos;ll show up here
-              with its delivery status.
+              {t("noOrdersBody")}
             </p>
             <Link
               href="/shop"
               className="mt-6 inline-block rounded-full bg-plum px-8 py-3 text-sm font-semibold text-warmwhite transition hover:bg-rose"
             >
-              Shop wigs
+              {t("shopWigs")}
             </Link>
           </div>
         ) : (
@@ -98,7 +99,7 @@ export default async function AccountPage() {
                             : "bg-blush text-plum"
                     }`}
                   >
-                    {STATUS_LABELS[order.status]}
+                    {tt(STATUS_LABELS[order.status])}
                   </span>
                 </div>
 
@@ -113,7 +114,7 @@ export default async function AccountPage() {
                     href={`/track${order.status === "demo" ? "" : `?order=${encodeURIComponent(order.id)}`}`}
                     className="font-semibold text-plum hover:text-rose"
                   >
-                    Track →
+                    {t("trackArrow")}
                   </Link>
                   <span className="font-semibold text-plum">
                     {formatZAR(order.total)}

@@ -9,27 +9,27 @@ export const ORDER_STEPS: OrderStatus[] = [
 ];
 
 export const STATUS_LABELS: Record<OrderStatus, string> = {
-  pending: "Payment pending",
-  paid: "Payment confirmed",
-  packed: "Packed & ready",
-  sent: "On its way with PAXI",
-  delivered: "At your PAXI store",
-  complete: "Delivered",
-  cancelled: "Cancelled",
-  failed: "Payment failed",
-  demo: "Test order (demo)",
+  pending: "status.pending",
+  paid: "status.paid",
+  packed: "status.packed",
+  sent: "status.sent",
+  delivered: "status.delivered",
+  complete: "status.complete",
+  cancelled: "status.cancelled",
+  failed: "status.failed",
+  demo: "status.demo",
 };
 
 export const STEP_DESCRIPTIONS: Record<OrderStatus, string> = {
-  pending: "We've received your order and are waiting for payment to confirm.",
-  paid: "Payment confirmed. We're preparing your order for dispatch.",
-  packed: "Your wig is packed and ready to be handed to PAXI.",
-  sent: "Your parcel is on its way to your chosen PAXI store.",
-  delivered: "Your parcel is ready to collect at your PAXI store. Bring your ID.",
-  complete: "Delivery complete. Enjoy your new wig!",
-  cancelled: "This order was cancelled. Any refund is processed to your original payment method.",
-  failed: "Payment didn't complete. Please try again or contact us for help.",
-  demo: "This order was placed in demo mode — no real payment was taken.",
+  pending: "step.pending",
+  paid: "step.paid",
+  packed: "step.packed",
+  sent: "step.sent",
+  delivered: "step.delivered",
+  complete: "step.complete",
+  cancelled: "step.cancelled",
+  failed: "step.failed",
+  demo: "step.demo",
 };
 
 export function stepIndex(status: OrderStatus) {
@@ -46,13 +46,13 @@ export function statusProgress(status: OrderStatus): number {
 
 export const ADMIN_STATUS_CHOICES: {
   value: OrderStatus;
-  label: string;
+  labelKey: string;
 }[] = [
-  { value: "paid", label: "Paid" },
-  { value: "packed", label: "Packed" },
-  { value: "sent", label: "Sent / on its way" },
-  { value: "delivered", label: "At store / collected" },
-  { value: "cancelled", label: "Cancelled" },
+  { value: "paid", labelKey: "admin.paid" },
+  { value: "packed", labelKey: "admin.packed" },
+  { value: "sent", labelKey: "admin.sent" },
+  { value: "delivered", labelKey: "admin.delivered" },
+  { value: "cancelled", labelKey: "admin.cancelled" },
 ];
 
 export function canTransition(from: OrderStatus, to: OrderStatus) {

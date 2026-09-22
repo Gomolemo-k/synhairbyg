@@ -3,8 +3,10 @@
 import { useState } from "react";
 import { useCart } from "./CartProvider";
 import type { Product } from "@/lib/products";
+import { translator } from "@/lib/i18n";
 
 export default function AddToCart({ product }: { product: Product }) {
+  const t = translator("addToCart");
   const { addItem } = useCart();
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
@@ -20,7 +22,7 @@ export default function AddToCart({ product }: { product: Product }) {
       <div className="inline-flex h-12 w-32 items-center justify-between rounded-full border border-plum/25 bg-white">
         <button
           type="button"
-          aria-label="Decrease quantity"
+          aria-label={t("dec")}
           onClick={() => setQty((q) => Math.max(1, q - 1))}
           className="flex h-full w-10 items-center justify-center rounded-l-full text-plum transition hover:bg-blush"
         >
@@ -29,7 +31,7 @@ export default function AddToCart({ product }: { product: Product }) {
         <span className="text-base font-semibold">{qty}</span>
         <button
           type="button"
-          aria-label="Increase quantity"
+          aria-label={t("inc")}
           onClick={() => setQty((q) => Math.min(product.stock, q + 1))}
           className="flex h-full w-10 items-center justify-center rounded-r-full text-plum transition hover:bg-blush"
         >
@@ -43,7 +45,7 @@ export default function AddToCart({ product }: { product: Product }) {
           added ? "bg-gold" : "bg-plum hover:bg-rose"
         }`}
       >
-        {added ? "Added to cart ✓" : "Add to Cart"}
+        {added ? t("added") : t("label")}
       </button>
     </div>
   );

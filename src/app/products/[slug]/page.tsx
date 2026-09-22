@@ -10,6 +10,7 @@ import {
   products,
 } from "@/lib/products";
 import { formatZAR } from "@/lib/format";
+import { translator } from "@/lib/i18n";
 
 export function generateStaticParams() {
   return products.map((p) => ({ slug: p.slug }));
@@ -18,10 +19,11 @@ export function generateStaticParams() {
 export async function generateMetadata(
   props: PageProps<"/products/[slug]">,
 ): Promise<Metadata> {
+  const tm = translator("metadata");
   const { slug } = await props.params;
   const product = getProductBySlug(slug);
 
-  if (!product) return { title: "Product not found" };
+  if (!product) return { title: tm("productNotFoundTitle") };
 
   return {
     title: product.name,
@@ -29,9 +31,17 @@ export async function generateMetadata(
   };
 }
 
+const collectionNames: Record<string, string> = {
+  "signature-blend": "Signature Human Blend",
+  synthetic: "Synthetic Edit",
+  "bridal-occasion": "Bridal & Occasion",
+};
+
 export default async function ProductPage(
   props: PageProps<"/products/[slug]">,
 ) {
+  const t = translator("product");
+  const tc = translator("common");
   const { slug } = await props.params;
   const product = getProductBySlug(slug);
 
@@ -45,11 +55,11 @@ export default async function ProductPage(
       : 0;
 
   const specs = [
-    ["Length", product.length],
-    ["Texture", product.texture],
-    ["Cap", product.capType],
-    ["Density", product.density],
-    ["Colour", product.color],
+    [t("specLength"), product.length],
+    [t("specTexture"), product.texture],
+    [t("specCap"), product.capType],
+    [t("specDensity"), product.density],
+    [t("specColour"), product.color],
   ];
 
   const related = getProductsByCollection(product.collection)
@@ -60,18 +70,14 @@ export default async function ProductPage(
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
       <nav className="mb-8 text-xs font-semibold uppercase tracking-wide text-charcoal/50">
         <Link href="/shop" className="transition hover:text-plum">
-          Shop
+          {t("breadcrumbShop")}
         </Link>
         <span className="mx-2">/</span>
         <Link
           href={`/collections/${product.collection}`}
           className="transition hover:text-plum"
         >
-          {product.collection === "signature-blend"
-            ? "Signature Human Blend"
-            : product.collection === "synthetic"
-              ? "Synthetic Edit"
-              : "Bridal & Occasion"}
+          {collectionNames[product.collection] ?? t("breadcrumbShop")}
         </Link>
         <span className="mx-2">/</span>
         <span className="text-plum">{product.name}</span>
@@ -93,7 +99,7 @@ export default async function ProductPage(
             )}
             {discount > 0 && (
               <span className="rounded-full bg-gold px-3 py-1 text-xs font-bold uppercase tracking-wide text-charcoal">
-                Save {discount}%
+                {tc("savePercent", { percent: discount })}
               </span>
             )}
           </div>
@@ -118,7 +124,7 @@ export default async function ProductPage(
                   {formatZAR(product.compareAtPrice)}
                 </span>
                 <span className="text-sm font-semibold text-gold">
-                  Save {formatZAR(product.compareAtPrice - product.price)}
+                  {tc("saveAmount", { amount: formatZAR(product.compareAtPrice - product.price) })}
                 </span>
               </>
             )}
@@ -126,9 +132,9 @@ export default async function ProductPage(
 
           <div className="mt-3 flex items-center gap-2 text-sm">
             <span className="text-gold">★★★★★</span>
-            <span className="text-charcoal/55">4.9 · Loved by our babes</span>
+            <span className="text-charcoal/55">{t("rating")}</span>
             <span className="ml-auto rounded-full bg-blush px-3 py-1 text-xs font-semibold text-plum">
-              In stock · {product.stock} available
+              {t("inStock", { stock: product.stock })}
             </span>
           </div>
 
@@ -154,18 +160,9 @@ export default async function ProductPage(
 
           <div className="mt-8 divide-y divide-blush border-y border-blush text-sm">
             {[
-              [
-                "Delivery",
-                "PAXI delivery to your nearest PEP store. Standard R59.95, express R109.95. Free over R1,500.",
-              ],
-              [
-                "Payments",
-                "Secure checkout via Yoco — instant payment in seconds.",
-              ],
-              [
-                "Returns",
-                "Cancel before dispatch for a full refund. Wigs are final sale once worn for hygiene reasons. See policies.",
-              ],
+              [t("deliveryTitle"), t("deliveryBody")],
+              [t("paymentsTitle"), t("paymentsBody")],
+              [t("returnsTitle"), t("returnsBody")],
             ].map(([title, text]) => (
               <div key={title} className="py-4">
                 <p className="font-semibold text-plum">{title}</p>
@@ -180,10 +177,10 @@ export default async function ProductPage(
         <section className="mt-24">
           <div className="mb-8">
             <p className="text-xs font-bold uppercase tracking-[0.25em] text-gold">
-              Complete the look
+              {t("completeLook")}
             </p>
             <h2 className="mt-2 font-display text-3xl text-plum">
-              You may also love
+              {t("relatedTitle")}
             </h2>
           </div>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">

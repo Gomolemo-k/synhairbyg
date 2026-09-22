@@ -2,14 +2,16 @@
 
 import Link from "next/link";
 import { useCart } from "./CartProvider";
+import { translator } from "@/lib/i18n";
 
 export function CartToggle() {
   const { count, openCart } = useCart();
+  const t = translator("header");
 
   return (
     <button
       onClick={openCart}
-      aria-label={`Open cart (${count} items)`}
+      aria-label={t("openCart", { count })}
       className="relative flex h-10 w-10 items-center justify-center rounded-full border border-plum/25 text-plum transition hover:bg-blush"
     >
       <svg
@@ -35,10 +37,11 @@ export function CartToggle() {
 }
 
 export function MobileMenuToggle({ open, setOpen }: { open: boolean; setOpen: (v: boolean) => void }) {
+  const t = translator("header");
   return (
     <button
       onClick={() => setOpen(!open)}
-      aria-label="Toggle menu"
+      aria-label={t("toggleMenu")}
       className="flex h-10 w-10 items-center justify-center rounded-full border border-plum/25 text-plum transition hover:bg-blush md:hidden"
     >
       {open ? (
@@ -55,12 +58,14 @@ export function MobileMenuToggle({ open, setOpen }: { open: boolean; setOpen: (v
 }
 
 export default function HeaderInner({ open, setOpen }: { open: boolean; setOpen: (v: boolean) => void }) {
+  const t = translator("header");
+
   const nav = [
-    { href: "/shop", label: "Shop Wigs" },
-    { href: "/collections", label: "Collections" },
-    { href: "/track", label: "Track" },
-    { href: "/about", label: "About" },
-    { href: "/contact", label: "Contact" },
+    { href: "/shop", label: t("navShop") },
+    { href: "/collections", label: t("navCollections") },
+    { href: "/track", label: t("navTrack") },
+    { href: "/about", label: t("navAbout") },
+    { href: "/contact", label: t("navContact") },
   ];
 
   return (
@@ -87,7 +92,7 @@ export default function HeaderInner({ open, setOpen }: { open: boolean; setOpen:
       <div className="flex items-center gap-2">
         <Link
           href="/account"
-          aria-label="My account"
+          aria-label={t("myAccount")}
           className="flex h-10 w-10 items-center justify-center rounded-full border border-plum/25 text-plum transition hover:bg-blush"
         >
           <svg

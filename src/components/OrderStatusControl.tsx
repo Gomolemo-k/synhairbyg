@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ADMIN_STATUS_CHOICES } from "@/lib/tracking";
 import type { OrderStatus } from "@/lib/orders";
+import { translator } from "@/lib/i18n";
 
 export default function OrderStatusControl({
   orderId,
@@ -12,6 +13,8 @@ export default function OrderStatusControl({
   orderId: string;
   currentStatus: OrderStatus;
 }) {
+  const t = translator("statusControl");
+  const tt = translator("tracking");
   const router = useRouter();
   const [value, setValue] = useState<OrderStatus>(
     ADMIN_STATUS_CHOICES.some((c) => c.value === currentStatus)
@@ -35,13 +38,13 @@ export default function OrderStatusControl({
       );
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setMessage(data.error ?? "Could not update status.");
+        setMessage(data.error ?? t("error"));
       } else {
-        setMessage("Saved ✓");
+        setMessage(t("saved"));
         router.refresh();
       }
     } catch {
-      setMessage("Could not update status.");
+      setMessage(t("error"));
     } finally {
       setBusy(false);
     }
@@ -56,7 +59,7 @@ export default function OrderStatusControl({
       >
         {ADMIN_STATUS_CHOICES.map((c) => (
           <option key={c.value} value={c.value}>
-            {c.label}
+            {tt(c.labelKey)}
           </option>
         ))}
       </select>
@@ -65,7 +68,7 @@ export default function OrderStatusControl({
         disabled={busy}
         className="rounded-lg bg-plum px-3 py-1.5 text-xs font-semibold text-warmwhite transition hover:bg-rose disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {busy ? "…" : "Save"}
+        {busy ? "…" : t("save")}
       </button>
       {message && <span className="text-xs font-semibold text-plum">{message}</span>}
     </div>

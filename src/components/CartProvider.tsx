@@ -46,12 +46,39 @@ function readStored() {
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
     // Hydrate the cart from localStorage only on the client (SSR-safe).
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setItems(readStored());
+    setHydrated(true);
   }, []);
+
+  // If signed in, mirror the cart to the server so abandoned-cart reminders
+  // have something to work with.
+  useEffect(() => {
+    let stop = false;
+    fetch("/api/auth/me")
+      .then((r) => r.json())
+      .then((d) => {
+        if (!stop) setLoggedIn(Boolean(d?.user));
+      })
+      .catch(() => {});
+    return () => {
+      stop = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!loggedIn || !hydrated) return;
+    fetch("/api/cart/sync", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ items }),
+    }).catch(() => {});
+  }, [items, loggedIn, hydrated]);
 
   useEffect(() => {
     window.localStorage.setItem("synhairbyg-cart", JSON.stringify(items));

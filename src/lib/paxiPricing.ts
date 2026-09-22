@@ -13,16 +13,6 @@ export const PAXI_FEES: Record<PaxiService, Record<PaxiBag, number>> = {
   express: { standard: 109.95, large: 139.95 },
 };
 
-export const PAXI_SERVICE_LABELS: Record<PaxiService, string> = {
-  standard: "Standard — 7 to 9 business days",
-  express: "Express — 3 to 5 business days",
-};
-
-export const PAXI_BAG_LABELS: Record<PaxiBag, string> = {
-  standard: "Standard bag · up to 5kg",
-  large: "Large bag · up to 10kg",
-};
-
 export function getPaxiFee(bag: PaxiBag, service: PaxiService): number {
   return PAXI_FEES[service]?.[bag] ?? PAXI_FEES.standard.standard;
 }

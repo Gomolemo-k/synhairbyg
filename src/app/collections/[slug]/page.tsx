@@ -8,6 +8,7 @@ import {
   getCollection,
   getProductsByCollection,
 } from "@/lib/products";
+import { translator } from "@/lib/i18n";
 
 export function generateStaticParams() {
   return collections.map((c) => ({ slug: c.slug }));
@@ -16,14 +17,17 @@ export function generateStaticParams() {
 export async function generateMetadata(
   props: PageProps<"/collections/[slug]">,
 ): Promise<Metadata> {
+  const tm = translator("metadata");
   const { slug } = await props.params;
   const collection = getCollection(slug);
-  return { title: collection ? collection.name : "Collection" };
+  return { title: collection ? collection.name : tm("collectionFallback") };
 }
 
 export default async function CollectionPage(
   props: PageProps<"/collections/[slug]">,
 ) {
+  const t = translator("collections");
+  const tc = translator("common");
   const { slug } = await props.params;
   const collection = getCollection(slug);
 
@@ -35,7 +39,7 @@ export default async function CollectionPage(
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
       <nav className="mb-8 text-xs font-semibold uppercase tracking-wide text-charcoal/50">
         <Link href="/collections" className="transition hover:text-plum">
-          Collections
+          {t("title")}
         </Link>
         <span className="mx-2">/</span>
         <span className="text-plum">{collection.name}</span>
@@ -62,7 +66,7 @@ export default async function CollectionPage(
               {collection.description}
             </p>
             <p className="mt-3 text-xs font-semibold uppercase tracking-wide text-warmwhite/60">
-              {items.length} styles
+              {tc("stylesCount", { count: items.length })}
             </p>
           </div>
         </div>

@@ -7,12 +7,14 @@ import {
   stepIndex,
 } from "@/lib/tracking";
 import type { OrderStatus } from "@/lib/orders";
+import { translator } from "@/lib/i18n";
 
 export default function OrderStatusTimeline({
   status,
 }: {
   status: OrderStatus;
 }) {
+  const t = translator("tracking");
   const current = stepIndex(status);
   const complete = status === "complete";
 
@@ -48,15 +50,15 @@ export default function OrderStatusTimeline({
                   done || now ? "text-plum" : "text-charcoal/45"
                 }`}
               >
-                {STATUS_LABELS[step]}
+                {t(STATUS_LABELS[step])}
                 {now && (
                   <span className="ml-2 rounded-full bg-gold/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-gold">
-                    Current
+                    {t("current")}
                   </span>
                 )}
               </p>
               <p className="mt-0.5 max-w-md text-xs text-charcoal/55">
-                {STEP_DESCRIPTIONS[step]}
+                {t(STEP_DESCRIPTIONS[step])}
               </p>
             </div>
           </li>

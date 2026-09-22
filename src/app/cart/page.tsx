@@ -6,22 +6,23 @@ import { QtyStepper } from "@/components/CartDrawer";
 import ProductArt from "@/components/ProductArt";
 import { getProductById, FREE_SHIPPING_THRESHOLD } from "@/lib/products";
 import { formatZAR } from "@/lib/format";
+import { translator } from "@/lib/i18n";
 
 export default function CartPage() {
+  const t = translator("cart");
+  const tc = translator("common");
   const { items, subtotal, shipping, total, updateQty, removeItem } = useCart();
 
   if (items.length === 0) {
     return (
       <div className="mx-auto max-w-3xl px-4 py-24 text-center sm:px-6">
-        <p className="font-display text-4xl text-plum">Your cart is empty</p>
-        <p className="mt-3 text-charcoal/60">
-          Your next crown is waiting in the shop.
-        </p>
+        <p className="font-display text-4xl text-plum">{t("emptyTitle")}</p>
+        <p className="mt-3 text-charcoal/60">{t("emptyBody")}</p>
         <Link
           href="/shop"
           className="mt-8 inline-block rounded-full bg-plum px-10 py-4 text-sm font-semibold text-warmwhite transition hover:bg-rose"
         >
-          Shop Wigs
+          {tc("shopWigs")}
         </Link>
       </div>
     );
@@ -31,15 +32,17 @@ export default function CartPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8">
-      <h1 className="font-display text-4xl text-plum">Your Cart</h1>
+      <h1 className="font-display text-4xl text-plum">{t("title")}</h1>
 
       <div className="mt-4 rounded-full bg-blush px-5 py-3 text-sm text-plum">
         {shipping === 0 ? (
-          <>Woohoo — you&apos;ve unlocked <span className="font-bold">free delivery</span>!</>
+          <>
+            {t("unlockPre")}<span className="font-bold">{t("unlockBold")}</span>{t("unlockPost")}
+          </>
         ) : (
           <>
-            Add <span className="font-bold">{formatZAR(remaining)}</span> more to
-            get <span className="font-bold">free delivery</span>.
+            {t("addPre")}<span className="font-bold">{t("addBoldAmount", { amount: formatZAR(remaining) })}</span>
+            {t("addMid")}<span className="font-bold">{t("addBoldFree")}</span>{t("addPost")}
           </>
         )}
       </div>
@@ -72,14 +75,18 @@ export default function CartPage() {
                         {product.name}
                       </Link>
                       <p className="text-sm text-charcoal/55">
-                        {product.type} · {product.length} · {product.texture}
+                        {t("meta", {
+                          type: product.type,
+                          length: product.length,
+                          texture: product.texture,
+                        })}
                       </p>
                     </div>
                     <button
                       onClick={() => removeItem(item.productId)}
                       className="text-xs text-charcoal/40 transition hover:text-plum"
                     >
-                      Remove
+                      {tc("remove")}
                     </button>
                   </div>
                   <div className="mt-auto flex items-center justify-between pt-4">
@@ -98,24 +105,24 @@ export default function CartPage() {
         </ul>
 
         <aside className="h-fit rounded-2xl border border-blush bg-warmwhite p-6">
-          <h2 className="font-display text-2xl text-plum">Order Summary</h2>
+          <h2 className="font-display text-2xl text-plum">{t("orderSummary")}</h2>
           <dl className="mt-5 space-y-3 text-sm">
             <div className="flex justify-between">
-              <dt className="text-charcoal/60">Subtotal</dt>
+              <dt className="text-charcoal/60">{tc("subtotal")}</dt>
               <dd className="font-semibold">{formatZAR(subtotal)}</dd>
             </div>
             <div className="flex justify-between">
-              <dt className="text-charcoal/60">Delivery</dt>
+              <dt className="text-charcoal/60">{tc("delivery")}</dt>
               <dd className="font-semibold">
                 {shipping === 0 ? (
-                  <span className="text-gold">Free</span>
+                  <span className="text-gold">{tc("free")}</span>
                 ) : (
                   formatZAR(shipping)
                 )}
               </dd>
             </div>
             <div className="flex justify-between border-t border-blush pt-3 text-base">
-              <dt className="font-semibold">Total</dt>
+              <dt className="font-semibold">{tc("total")}</dt>
               <dd className="font-bold text-plum">{formatZAR(total)}</dd>
             </div>
           </dl>
@@ -123,16 +130,16 @@ export default function CartPage() {
             href="/checkout"
             className="mt-6 block rounded-full bg-plum py-4 text-center text-sm font-semibold text-warmwhite transition hover:bg-rose"
           >
-            Proceed to Checkout
+            {t("proceed")}
           </Link>
           <Link
             href="/shop"
             className="mt-3 block text-center text-sm font-semibold text-plum underline decoration-gold decoration-2 underline-offset-4 transition hover:text-rose"
           >
-            Continue shopping
+            {tc("continueShopping")}
           </Link>
           <p className="mt-5 text-center text-xs text-charcoal/45">
-            Secure checkout via Yoco — instant payment in seconds.
+            {tc("yocoNote")}
           </p>
         </aside>
       </div>

@@ -2,24 +2,27 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import ProductArt from "@/components/ProductArt";
 import { collections, getProductsByCollection } from "@/lib/products";
+import { translator } from "@/lib/i18n";
+
+const tm = translator("metadata");
 
 export const metadata: Metadata = {
-  title: "Collections",
-  description:
-    "Explore SynHairbyG collections — Signature Human Blend, the Synthetic Edit, and Bridal & Occasion.",
+  title: tm("collectionsTitle"),
+  description: tm("collectionsDescription"),
 };
 
 export default function CollectionsPage() {
+  const t = translator("collections");
+  const tc = translator("common");
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
       <div className="mb-12">
         <p className="text-xs font-bold uppercase tracking-[0.25em] text-gold">
-          Curated for you
+          {t("eyebrow")}
         </p>
-        <h1 className="mt-2 font-display text-5xl text-plum">Collections</h1>
-        <p className="mt-3 max-w-xl text-charcoal/65">
-          Every wig belongs to a family. Pick your mood and shop the edit.
-        </p>
+        <h1 className="mt-2 font-display text-5xl text-plum">{t("title")}</h1>
+        <p className="mt-3 max-w-xl text-charcoal/65">{t("intro")}</p>
       </div>
 
       <div className="grid gap-8 md:grid-cols-3">
@@ -51,10 +54,10 @@ export default function CollectionsPage() {
                 </p>
                 <div className="mt-5 flex items-center justify-between text-sm">
                   <span className="font-semibold text-charcoal">
-                    {items.length} styles
+                    {tc("stylesCount", { count: items.length })}
                   </span>
                   <span className="font-semibold text-plum underline decoration-gold decoration-2 underline-offset-4 transition group-hover:text-rose">
-                    Shop collection
+                    {t("shopCollection")}
                   </span>
                 </div>
               </div>

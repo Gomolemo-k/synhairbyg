@@ -80,6 +80,28 @@ export async function getUserByEmail(email: string) {
   return res.rowCount ? res.rows[0] : undefined;
 }
 
+export async function getUserById(id: string) {
+  if (!pool) return undefined;
+  const res = await pool.query("select * from users where id = $1", [id]);
+  return res.rowCount ? res.rows[0] : undefined;
+}
+
+/** Re-hashes the password and invalidates all existing sessions + reset
+ *  tokens so an old leaked session can't survive a password change. */
+export async function updatePassword(userId: string, password: string) {
+  if (!pool) throw new Error("Database not configured.");
+  const passwordHash = await hashPassword(password);
+  await pool.query("update users set password_hash = $1 where id = $2", [
+    passwordHash,
+    userId,
+  ]);
+  await pool.query("delete from sessions where user_id = $1", [userId]);
+  await pool.query(
+    "delete from email_tokens where user_id = $1 and type = 'reset'",
+    [userId],
+  );
+}
+
 export async function createSession(user: AuthUser) {
   if (!pool) throw new Error("Database not configured.");
   const token = randomBytes(32).toString("base64url");

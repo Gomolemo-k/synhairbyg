@@ -4,6 +4,11 @@ import {
   createUser,
   setSessionCookie,
 } from "@/lib/auth";
+import { createEmailToken } from "@/lib/emailTokens";
+import {
+  sendVerificationEmail,
+  sendWelcomeEmail,
+} from "@/lib/mail/templates";
 
 export async function POST(req: NextRequest) {
   let body: { name?: string; email?: string; password?: string };
@@ -60,6 +65,21 @@ export async function POST(req: NextRequest) {
 
   const token = await createSession(result.user);
   await setSessionCookie(token);
+
+  // Send the welcome + verification emails in the background so signup isn't
+  // slowed down by mail delivery. Failures are logged, never surfaced to the
+  // user (they can re-verify later).
+  void (async () => {
+    try {
+      const verifyToken = await createEmailToken(result.user.id, "verify");
+      await Promise.allSettled([
+        sendWelcomeEmail(result.user.email, result.user.name),
+        sendVerificationEmail(result.user.email, result.user.name, verifyToken),
+      ]);
+    } catch (err) {
+      console.error("Signup email failed:", err);
+    }
+  })();
 
   return NextResponse.json({ ok: true, user: result.user });
 }

@@ -2,11 +2,13 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import ProductCard from "@/components/ProductCard";
 import { products, type WigType } from "@/lib/products";
+import { translator } from "@/lib/i18n";
+
+const tm = translator("metadata");
 
 export const metadata: Metadata = {
-  title: "Shop Wigs",
-  description:
-    "Browse every synthetic and human blend wig at SynHairbyG. Filter by type and sort by price.",
+  title: tm("shopTitle"),
+  description: tm("shopDescription"),
 };
 
 const types: (WigType | "All")[] = ["All", "Human Blend", "Synthetic"];
@@ -22,6 +24,7 @@ function buildHref(type: string, sort: string) {
 export default async function ShopPage(
   props: PageProps<"/shop">,
 ) {
+  const t = translator("shop");
   const searchParams = await props.searchParams;
   const type = (searchParams.type as string | undefined) ?? "All";
   const sort = (searchParams.sort as string | undefined) ?? "featured";
@@ -47,44 +50,49 @@ export default async function ShopPage(
       break;
   }
 
+  const typeLabels: Record<string, string> = {
+    All: t("all"),
+    "Human Blend": t("humanBlend"),
+    Synthetic: t("synthetic"),
+  };
+
   const sortOptions = [
-    { value: "featured", label: "Featured" },
-    { value: "price-asc", label: "Price: Low to High" },
-    { value: "price-desc", label: "Price: High to Low" },
+    { value: "featured", label: t("sortFeatured") },
+    { value: "price-asc", label: t("sortPriceAsc") },
+    { value: "price-desc", label: t("sortPriceDesc") },
   ];
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
       <div className="mb-10">
         <p className="text-xs font-bold uppercase tracking-[0.25em] text-gold">
-          The full edit
+          {t("eyebrow")}
         </p>
-        <h1 className="mt-2 font-display text-5xl text-plum">Shop Wigs</h1>
+        <h1 className="mt-2 font-display text-5xl text-plum">{t("title")}</h1>
         <p className="mt-3 max-w-xl text-charcoal/65">
-          {products.length} hand-picked styles across synthetic and human blend.
-          New drops land every month.
+          {t("intro", { count: products.length })}
         </p>
       </div>
 
       <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
         <div className="flex flex-wrap gap-2">
-          {types.map((t) => (
+          {types.map((item) => (
             <Link
-              key={t}
-              href={buildHref(t, sort)}
+              key={item}
+              href={buildHref(item, sort)}
               className={`rounded-full px-5 py-2 text-sm font-semibold transition ${
-                type === t
+                type === item
                   ? "bg-plum text-warmwhite"
                   : "border border-plum/25 text-plum hover:bg-blush"
               }`}
             >
-              {t}
+              {typeLabels[item]}
             </Link>
           ))}
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-sm text-charcoal/50">Sort by</span>
+          <span className="text-sm text-charcoal/50">{t("sortBy")}</span>
           <div className="flex flex-wrap gap-2">
             {sortOptions.map((option) => (
               <Link
@@ -105,10 +113,8 @@ export default async function ShopPage(
 
       {list.length === 0 ? (
         <div className="rounded-2xl border border-blush bg-blush/40 py-20 text-center">
-          <p className="font-display text-2xl text-plum">Nothing here yet</p>
-          <p className="mt-2 text-sm text-charcoal/60">
-            Try a different filter — new styles drop every month.
-          </p>
+          <p className="font-display text-2xl text-plum">{t("emptyTitle")}</p>
+          <p className="mt-2 text-sm text-charcoal/60">{t("emptyBody")}</p>
         </div>
       ) : (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

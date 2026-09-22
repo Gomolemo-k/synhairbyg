@@ -4,26 +4,27 @@ import { useState } from "react";
 import Link from "next/link";
 import HeaderInner from "./HeaderInner";
 import CartDrawer from "./CartDrawer";
+import { translator } from "@/lib/i18n";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const t = translator("header");
 
   const nav = [
-    { href: "/shop", label: "Shop Wigs" },
-    { href: "/collections", label: "Collections" },
-    { href: "/track", label: "Track" },
-    { href: "/account", label: "Account" },
-    { href: "/about", label: "About" },
-    { href: "/contact", label: "Contact" },
-    { href: "/policies", label: "Policies" },
+    { href: "/shop", label: t("navShop") },
+    { href: "/collections", label: t("navCollections") },
+    { href: "/track", label: t("navTrack") },
+    { href: "/account", label: t("navAccount") },
+    { href: "/about", label: t("navAbout") },
+    { href: "/contact", label: t("navContact") },
+    { href: "/policies", label: t("navPolicies") },
   ];
 
   return (
     <>
       <CartDrawer />
       <div className="bg-plum py-2 text-center text-xs font-medium tracking-wide text-warmwhite">
-        Free nationwide delivery on orders over R1,500 &middot; Secure Yoco
-        checkout
+        {t("topBar")}
       </div>
       <header className="sticky top-0 z-30 border-b border-blush bg-warmwhite/90 backdrop-blur">
         <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">

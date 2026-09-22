@@ -6,11 +6,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useCart } from "@/components/CartProvider";
 import { getProductById } from "@/lib/products";
 import { formatZAR } from "@/lib/format";
-import {
-  getPaxiFee,
-  PAXI_SERVICE_LABELS,
-  type PaxiService,
-} from "@/lib/paxiPricing";
+import { getPaxiFee, type PaxiService } from "@/lib/paxiPricing";
+import { translator } from "@/lib/i18n";
 
 type PaxiPointOption = {
   code: string;
@@ -23,6 +20,9 @@ type PaxiPointOption = {
 };
 
 function CheckoutContent() {
+  const t = translator("checkout");
+  const tc = translator("common");
+  const tp = translator("paxi");
   const { items, subtotal, clearCart } = useCart();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -72,11 +72,11 @@ function CheckoutContent() {
       if (data.cities.length) setCities(data.cities);
       setPoints(data.points);
     } catch {
-      setPointError("Could not load PAXI points. Please try again.");
+      setPointError(t("loadPointsError"));
     } finally {
       setLoadingPoints(false);
     }
-  }, [province, city, search]);
+  }, [province, city, search, t]);
 
   useEffect(() => {
     // Fetching stores on mount / when the selection changes is external-side
@@ -94,11 +94,11 @@ function CheckoutContent() {
     setError("");
 
     if (!pointCode || !selectedPoint) {
-      setError("Please choose your nearest PEP / PAXI collection point.");
+      setError(t("errNoPoint"));
       return;
     }
     if (!province) {
-      setError("Please select your province to find nearby PAXI points.");
+      setError(t("errNoProvince"));
       return;
     }
 
@@ -143,13 +143,13 @@ function CheckoutContent() {
     };
 
     if (!res.ok || data.error) {
-      setError(data.error ?? "Something went wrong. Please try again.");
+      setError(data.error ?? t("errorFallback"));
       setSubmitting(false);
       return;
     }
 
     if (data.mode === "yoco" && data.redirectUrl) {
-      window.location.href = data.redirectUrl;
+      window.location.assign(data.redirectUrl);
       return;
     }
 
@@ -165,19 +165,19 @@ function CheckoutContent() {
   if (items.length === 0) {
     return (
       <div className="mx-auto max-w-3xl px-4 py-24 text-center sm:px-6">
-        <p className="font-display text-4xl text-plum">Nothing to check out</p>
+        <p className="font-display text-4xl text-plum">{t("emptyTitle")}</p>
         <p className="mt-3 text-charcoal/60">
           {cancelled
-            ? "Your payment was cancelled — no charge was made. Find what you love and try again."
+            ? t("emptyCancelled")
             : failed
-              ? "Your payment didn't go through and no charge was made. Your cart is still safe."
-              : "Your cart is empty."}
+              ? t("emptyFailed")
+              : t("emptyEmpty")}
         </p>
         <Link
           href="/shop"
           className="mt-8 inline-block rounded-full bg-plum px-10 py-4 text-sm font-semibold text-warmwhite transition hover:bg-rose"
         >
-          {cancelled || failed ? "Back to Shopping" : "Shop Wigs"}
+          {cancelled || failed ? tc("backToShopping") : tc("shopWigs")}
         </Link>
       </div>
     );
@@ -192,26 +192,23 @@ function CheckoutContent() {
     <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8">
       {(cancelled || failed) && (
         <div className="mb-8 rounded-2xl border border-gold/40 bg-gold/10 px-5 py-4 text-sm text-charcoal">
-          Your payment was <span className="font-semibold">
-            {failed ? "unsuccessful" : "cancelled"}
+          {t("bannerPre")}<span className="font-semibold">
+            {failed ? t("bannerFailed") : t("bannerCancelled")}
           </span>
-          . No charge was made — your cart is still safe.
+          {t("bannerPost")}
         </div>
       )}
 
-      <h1 className="font-display text-4xl text-plum">Checkout</h1>
-      <p className="mt-2 text-sm text-charcoal/55">
-        Secure checkout powered by Yoco. Pay by card or instant EFT — your
-        details never touch our servers.
-      </p>
+      <h1 className="font-display text-4xl text-plum">{t("title")}</h1>
+      <p className="mt-2 text-sm text-charcoal/55">{t("subtitle")}</p>
 
       <form onSubmit={handleSubmit} className="mt-10 grid gap-10 lg:grid-cols-[1fr_360px]">
         <div className="space-y-8">
           <section className="rounded-2xl border border-blush bg-warmwhite p-6 sm:p-8">
-            <h2 className="font-display text-2xl text-plum">Contact</h2>
+            <h2 className="font-display text-2xl text-plum">{t("sectionContact")}</h2>
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
               <label className="block">
-                <span className={labelClasses}>First name</span>
+                <span className={labelClasses}>{t("firstName")}</span>
                 <input
                   required
                   className={inputClasses}
@@ -220,7 +217,7 @@ function CheckoutContent() {
                 />
               </label>
               <label className="block">
-                <span className={labelClasses}>Last name</span>
+                <span className={labelClasses}>{t("lastName")}</span>
                 <input
                   required
                   className={inputClasses}
@@ -229,7 +226,7 @@ function CheckoutContent() {
                 />
               </label>
               <label className="block">
-                <span className={labelClasses}>Email</span>
+                <span className={labelClasses}>{t("email")}</span>
                 <input
                   required
                   type="email"
@@ -239,12 +236,12 @@ function CheckoutContent() {
                 />
               </label>
               <label className="block">
-                <span className={labelClasses}>Phone / WhatsApp</span>
+                <span className={labelClasses}>{t("phone")}</span>
                 <input
                   required
                   type="tel"
                   className={inputClasses}
-                  placeholder="+27 82 000 0000"
+                  placeholder={t("phonePlaceholder")}
                   value={form.phone}
                   onChange={(e) => set("phone", e.target.value)}
                 />
@@ -253,20 +250,17 @@ function CheckoutContent() {
           </section>
 
           <section className="rounded-2xl border border-blush bg-warmwhite p-6 sm:p-8">
-            <h2 className="font-display text-2xl text-plum">Delivery</h2>
-            <p className="mt-2 text-sm text-charcoal/60">
-              Your order is shipped via PAXI and collected at the PEP store
-              closest to you.
-            </p>
+            <h2 className="font-display text-2xl text-plum">{t("sectionDelivery")}</h2>
+            <p className="mt-2 text-sm text-charcoal/60">{t("deliveryIntro")}</p>
 
             <div className="mt-6 space-y-6">
                 <div>
-                  <p className={labelClasses}>Delivery speed</p>
+                  <p className={labelClasses}>{t("deliverySpeed")}</p>
                   <div className="grid gap-3 sm:grid-cols-2">
                     {(
                       [
-                        ["standard", PAXI_SERVICE_LABELS.standard],
-                        ["express", PAXI_SERVICE_LABELS.express],
+                        ["standard", tp("service.standard")],
+                        ["express", tp("service.express")],
                       ] as const
                     ).map(([value, label]) => (
                       <label
@@ -297,14 +291,11 @@ function CheckoutContent() {
                 </div>
 
                 <div>
-                  <p className={labelClasses}>Where should we send it?</p>
-                  <p className="mb-3 text-xs text-charcoal/55">
-                    Choose the PEP / PAXI store closest to you — you&apos;ll
-                    collect your order there.
-                  </p>
+                  <p className={labelClasses}>{t("whereToSend")}</p>
+                  <p className="mb-3 text-xs text-charcoal/55">{t("whereToSendHelp")}</p>
                   <div className="grid gap-4 sm:grid-cols-2">
                     <label className="block">
-                      <span className={labelClasses}>Province</span>
+                      <span className={labelClasses}>{t("province")}</span>
                       <select
                         required
                         className={inputClasses}
@@ -315,7 +306,7 @@ function CheckoutContent() {
                           resetPointSelection();
                         }}
                       >
-                        <option value="">Select province</option>
+                        <option value="">{t("selectProvince")}</option>
                         {provinces.map((p) => (
                           <option key={p} value={p}>
                             {p}
@@ -324,7 +315,7 @@ function CheckoutContent() {
                       </select>
                     </label>
                     <label className="block">
-                      <span className={labelClasses}>City / town</span>
+                      <span className={labelClasses}>{t("city")}</span>
                       <select
                         className={inputClasses}
                         value={city}
@@ -335,7 +326,7 @@ function CheckoutContent() {
                         }}
                       >
                         <option value="">
-                          {province ? "All towns" : "Select province first"}
+                          {province ? t("allTowns") : t("selectProvinceFirst")}
                         </option>
                         {cities.map((c) => (
                           <option key={c} value={c}>
@@ -347,10 +338,10 @@ function CheckoutContent() {
                   </div>
 
                   <label className="mt-4 block">
-                    <span className={labelClasses}>Search stores</span>
+                    <span className={labelClasses}>{t("searchStores")}</span>
                     <input
                       className={inputClasses}
-                      placeholder="Store name, suburb or town…"
+                      placeholder={t("searchStoresPlaceholder")}
                       value={search}
                       onChange={(e) => {
                         setSearch(e.target.value);
@@ -369,12 +360,11 @@ function CheckoutContent() {
                     <div className="mt-4 max-h-72 overflow-y-auto rounded-xl border border-plum/15 bg-white">
                       {loadingPoints ? (
                         <p className="px-4 py-6 text-center text-sm text-charcoal/50">
-                          Loading stores…
+                          {t("loadingStores")}
                         </p>
                       ) : points.length === 0 ? (
                         <p className="px-4 py-6 text-center text-sm text-charcoal/50">
-                          No PAXI points found{search ? " for your search" : ""}.
-                          Try another town.
+                          {search ? t("noPointsFoundSearch") : t("noPointsFound")}
                         </p>
                       ) : (
                         <ul className="divide-y divide-plum/10">
@@ -404,7 +394,7 @@ function CheckoutContent() {
                                     {p.city}
                                   </span>
                                   <span className="block text-xs text-charcoal/40">
-                                    Point {p.code}
+                                    {t("pointCode", { code: p.code })}
                                   </span>
                                 </span>
                               </label>
@@ -417,20 +407,23 @@ function CheckoutContent() {
 
                   {selectedPoint && (
                     <p className="mt-3 rounded-xl bg-gold/10 px-4 py-3 text-sm text-charcoal">
-                      Collect at{" "}
-                      <span className="font-semibold">{selectedPoint.name}</span>{" "}
-                      — {selectedPoint.address}, {selectedPoint.city}.
+                      {t("collectAt")}
+                      <span className="font-semibold">{selectedPoint.name}</span>
+                      {t("collectAtSuffix", {
+                        address: selectedPoint.address,
+                        city: selectedPoint.city,
+                      })}
                     </p>
                   )}
                 </div>
               </div>
 
             <label className="mt-5 block">
-              <span className={labelClasses}>Order notes (optional)</span>
+              <span className={labelClasses}>{t("orderNotes")}</span>
               <textarea
                 rows={2}
                 className={inputClasses}
-                placeholder="Any delivery instructions, or a special message?"
+                placeholder={t("orderNotesPlaceholder")}
                 value={form.notes}
                 onChange={(e) => set("notes", e.target.value)}
               />
@@ -439,7 +432,7 @@ function CheckoutContent() {
         </div>
 
         <aside className="h-fit rounded-2xl border border-blush bg-warmwhite p-6">
-          <h2 className="font-display text-2xl text-plum">Your Order</h2>
+          <h2 className="font-display text-2xl text-plum">{t("yourOrder")}</h2>
           <ul className="mt-4 space-y-3 text-sm">
             {items.map((item) => {
               const product = getProductById(item.productId);
@@ -460,21 +453,21 @@ function CheckoutContent() {
 
           <dl className="mt-5 space-y-3 border-t border-blush pt-4 text-sm">
             <div className="flex justify-between">
-              <dt className="text-charcoal/60">Subtotal</dt>
+              <dt className="text-charcoal/60">{tc("subtotal")}</dt>
               <dd className="font-semibold">{formatZAR(subtotal)}</dd>
             </div>
             <div className="flex justify-between">
-              <dt className="text-charcoal/60">Delivery</dt>
+              <dt className="text-charcoal/60">{tc("delivery")}</dt>
               <dd className="font-semibold">
                 {selectedPoint ? (
                   formatZAR(deliveryFee)
                 ) : (
-                  <span className="text-charcoal/45">Choose a store</span>
+                  <span className="text-charcoal/45">{t("chooseAStore")}</span>
                 )}
               </dd>
             </div>
             <div className="flex justify-between border-t border-blush pt-3 text-base">
-              <dt className="font-semibold">Total</dt>
+              <dt className="font-semibold">{tc("total")}</dt>
               <dd className="font-bold text-plum">{formatZAR(total)}</dd>
             </div>
           </dl>
@@ -490,18 +483,17 @@ function CheckoutContent() {
             disabled={submitting}
             className="mt-6 w-full rounded-full bg-plum py-4 text-sm font-semibold text-warmwhite transition hover:bg-rose disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {submitting ? "Processing…" : `Pay ${formatZAR(total)} with Yoco`}
+            {submitting ? t("processing") : t("pay", { total: formatZAR(total) })}
           </button>
           <p className="mt-4 text-center text-xs text-charcoal/45">
-            Card · Instant EFT. Pay securely with Yoco. By placing your order
-            you agree to our{" "}
+            {t("secureNotePre")}
             <Link href="/policies" className="font-semibold text-plum underline">
-              policies
+              {t("secureNoteLink")}
             </Link>
-            .
+            {t("secureNotePost")}
           </p>
           <p className="mt-3 text-center text-xs text-charcoal/45">
-              PAXI delivery: {PAXI_SERVICE_LABELS[service]}
+              {t("paxiNote", { label: tp(`service.${service}`) })}
             </p>
         </aside>
       </form>
@@ -510,12 +502,13 @@ function CheckoutContent() {
 }
 
 export default function CheckoutPage() {
+  const tc = translator("common");
   return (
     <Suspense
       fallback={
         <div className="py-24 text-center">
           <div className="mx-auto h-12 w-12 animate-pulse rounded-full bg-blush" />
-          <p className="mt-4 text-charcoal/60">Loading checkout…</p>
+          <p className="mt-4 text-charcoal/60">{tc("loading")}</p>
         </div>
       }
     >

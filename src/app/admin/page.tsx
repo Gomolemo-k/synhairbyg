@@ -5,10 +5,14 @@ import { loadAllOrders } from "@/lib/orders";
 import { STATUS_LABELS } from "@/lib/tracking";
 import { formatZAR } from "@/lib/format";
 import OrderStatusControl from "@/components/OrderStatusControl";
+import AdminEmailActions from "@/components/AdminEmailActions";
+import { translator } from "@/lib/i18n";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminPage() {
+  const t = translator("admin");
+  const tt = translator("tracking");
   const user = await getSessionUser();
   if (!user) redirect("/sign-in");
   if (!isAdmin(user)) redirect("/account");
@@ -19,36 +23,37 @@ export default async function AdminPage() {
     <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="font-display text-4xl text-plum">Admin dashboard</h1>
+          <h1 className="font-display text-4xl text-plum">{t("title")}</h1>
           <p className="mt-2 text-sm text-charcoal/60">
-            {orders.length} order{orders.length === 1 ? "" : "s"} · update
-            delivery status as packages move through PAXI.
+            {t("intro", { count: orders.length })}
           </p>
         </div>
         <Link
           href="/account"
           className="rounded-full border border-plum/30 px-6 py-2.5 text-sm font-semibold text-plum transition hover:bg-blush"
         >
-          ← Back to account
+          {t("backToAccount")}
         </Link>
       </div>
 
+      <AdminEmailActions />
+
       {orders.length === 0 ? (
         <div className="mt-10 rounded-2xl border border-blush bg-warmwhite p-12 text-center">
-          <p className="text-charcoal/60">No orders yet.</p>
+          <p className="text-charcoal/60">{t("noOrders")}</p>
         </div>
       ) : (
         <div className="mt-8 overflow-x-auto rounded-2xl border border-blush bg-warmwhite">
           <table className="w-full min-w-[720px] text-left text-sm">
             <thead>
               <tr className="border-b border-blush text-xs font-bold uppercase tracking-wide text-charcoal/50">
-                <th className="px-5 py-3">Order</th>
-                <th className="px-5 py-3">Customer</th>
-                <th className="px-5 py-3">Items</th>
-                <th className="px-5 py-3">Delivery</th>
-                <th className="px-5 py-3">Total</th>
-                <th className="px-5 py-3">Status</th>
-                <th className="px-5 py-3">Update</th>
+                <th className="px-5 py-3">{t("colOrder")}</th>
+                <th className="px-5 py-3">{t("colCustomer")}</th>
+                <th className="px-5 py-3">{t("colItems")}</th>
+                <th className="px-5 py-3">{t("colDelivery")}</th>
+                <th className="px-5 py-3">{t("colTotal")}</th>
+                <th className="px-5 py-3">{t("colStatus")}</th>
+                <th className="px-5 py-3">{t("colUpdate")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-blush/70">
@@ -90,11 +95,11 @@ export default async function AdminPage() {
                           {order.paxi.pointAddress}
                         </p>
                         <p className="text-charcoal/40">
-                          {order.paxi.service} · Point {order.paxi.pointCode}
+                          {order.paxi.service} · {t("pointCode", { code: order.paxi.pointCode })}
                         </p>
                       </>
                     ) : (
-                      <span className="text-charcoal/40">—</span>
+                      <span className="text-charcoal/40">{t("dash")}</span>
                     )}
                   </td>
                   <td className="px-5 py-3 font-semibold text-plum">
@@ -102,7 +107,7 @@ export default async function AdminPage() {
                   </td>
                   <td className="px-5 py-3">
                     <span className="rounded-full bg-blush px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-plum">
-                      {STATUS_LABELS[order.status]}
+                      {tt(STATUS_LABELS[order.status])}
                     </span>
                   </td>
                   <td className="px-5 py-3">

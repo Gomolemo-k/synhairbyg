@@ -1,33 +1,33 @@
 import type { Metadata } from "next";
 import ContactForm from "@/components/ContactForm";
+import { translator } from "@/lib/i18n";
+
+const tm = translator("metadata");
 
 export const metadata: Metadata = {
-  title: "Contact Us",
-  description:
-    "Get in touch with SynHairbyG — orders, restocks, wholesale, or just a quick question about your crown.",
+  title: tm("contactTitle"),
+  description: tm("contactDescription"),
 };
 
 export default function ContactPage() {
+  const t = translator("contact");
+
   const details = [
+    { label: t("emailLabel"), value: t("emailValue"), note: t("emailNote") },
     {
-      label: "Email",
-      value: "hello@synhairbyg.com",
-      note: "Replies within 24 hours",
+      label: t("whatsappLabel"),
+      value: t("whatsappValue"),
+      note: t("whatsappNote"),
     },
     {
-      label: "WhatsApp",
-      value: "+27 82 000 0000",
-      note: "Fastest way to reach us",
+      label: t("instagramLabel"),
+      value: t("instagramValue"),
+      note: t("instagramNote"),
     },
     {
-      label: "Instagram",
-      value: "@synhairbyg",
-      note: "Drops, restocks & hair inspo",
-    },
-    {
-      label: "Location",
-      value: "Johannesburg, SA",
-      note: "Collection by appointment",
+      label: t("locationLabel"),
+      value: t("locationValue"),
+      note: t("locationNote"),
     },
   ];
 
@@ -35,13 +35,10 @@ export default function ContactPage() {
     <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
       <div className="mb-12 max-w-2xl">
         <p className="text-xs font-bold uppercase tracking-[0.25em] text-gold">
-          Talk to us
+          {t("eyebrow")}
         </p>
-        <h1 className="mt-2 font-display text-5xl text-plum">Contact</h1>
-        <p className="mt-3 leading-relaxed text-charcoal/65">
-          Questions about a wig, restock dates, wholesale, or a return? Drop us a
-          line — a real human answers.
-        </p>
+        <h1 className="mt-2 font-display text-5xl text-plum">{t("title")}</h1>
+        <p className="mt-3 leading-relaxed text-charcoal/65">{t("sub")}</p>
       </div>
 
       <div className="grid gap-10 lg:grid-cols-2">
@@ -62,13 +59,8 @@ export default function ContactPage() {
           ))}
 
           <div className="rounded-2xl bg-plum p-6 text-warmwhite sm:col-span-2">
-            <p className="font-display text-xl italic">
-              “Fast replies, honest answers, and it always feels like a friend is
-              helping.”
-            </p>
-            <p className="mt-3 text-xs text-warmwhite/60">
-              — what customers say about our DMs
-            </p>
+            <p className="font-display text-xl italic">{t("quote")}</p>
+            <p className="mt-3 text-xs text-warmwhite/60">{t("quoteNote")}</p>
           </div>
         </div>
       </div>

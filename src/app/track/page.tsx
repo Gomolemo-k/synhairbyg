@@ -7,6 +7,7 @@ import OrderStatusTimeline from "@/components/OrderStatusTimeline";
 import { STATUS_LABELS } from "@/lib/tracking";
 import { formatZAR } from "@/lib/format";
 import type { OrderStatus } from "@/lib/orders";
+import { translator } from "@/lib/i18n";
 
 const inputClasses =
   "mt-1 w-full rounded-xl border border-plum/20 bg-white px-4 py-3 text-sm text-charcoal outline-none transition focus:border-plum focus:ring-2 focus:ring-plum/20";
@@ -25,6 +26,9 @@ type TrackResult = {
 };
 
 function TrackContent() {
+  const t = translator("track");
+  const tt = translator("tracking");
+  const tp = translator("paxi");
   const searchParams = useSearchParams();
   const [order, setOrder] = useState("");
   const [email, setEmail] = useState("");
@@ -49,7 +53,7 @@ function TrackContent() {
     );
     setBusy(false);
     if (!res) {
-      setError("Could not reach the tracking service. Please try again.");
+      setError(t("trackError"));
       return;
     }
     const data = await res.json().catch(() => ({}));
@@ -64,10 +68,8 @@ function TrackContent() {
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6">
-      <h1 className="font-display text-4xl text-plum">Track your order</h1>
-      <p className="mt-2 text-sm text-charcoal/60">
-        Enter your order number and the email you used at checkout.
-      </p>
+      <h1 className="font-display text-4xl text-plum">{t("title")}</h1>
+      <p className="mt-2 text-sm text-charcoal/60">{t("intro")}</p>
 
       <form
         onSubmit={lookup}
@@ -75,18 +77,18 @@ function TrackContent() {
       >
         <label className="block">
           <span className="text-sm font-semibold text-charcoal">
-            Order number
+            {t("orderNumber")}
           </span>
           <input
             required
             className={inputClasses}
-            placeholder="e.g. SYN-2026-4F3A2B1C"
+            placeholder={t("orderNumberPlaceholder")}
             value={order}
             onChange={(e) => setOrder(e.target.value)}
           />
         </label>
         <label className="block">
-          <span className="text-sm font-semibold text-charcoal">Email</span>
+          <span className="text-sm font-semibold text-charcoal">{t("email")}</span>
           <input
             required
             type="email"
@@ -100,7 +102,7 @@ function TrackContent() {
           disabled={busy}
           className="self-end rounded-full bg-plum px-8 py-3 text-sm font-semibold text-warmwhite transition hover:bg-rose disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {busy ? "Tracking…" : "Track"}
+          {busy ? t("tracking") : t("track")}
         </button>
       </form>
 
@@ -114,24 +116,20 @@ function TrackContent() {
         <div className="mt-8 rounded-2xl border border-blush bg-warmwhite p-8 text-center">
           <p className="text-3xl">📦</p>
           <h2 className="mt-3 font-display text-2xl text-plum">
-            No order found
+            {t("notFoundTitle")}
           </h2>
           <p className="mt-2 text-sm text-charcoal/60">
-            We couldn&apos;t find an order matching those details. Double-check
-            your order number and email, or{" "}
+            {t("notFoundBodyPre")}
             <Link
               href="/contact"
               className="font-semibold text-plum underline decoration-gold decoration-2 underline-offset-4"
             >
-              contact us
-            </Link>{" "}
-            for help.
+              {t("notFoundLink")}
+            </Link>
+            {t("notFoundBodyPost")}
           </p>
           {searchParams.get("order") && (
-            <p className="mt-4 text-xs text-charcoal/45">
-              Tip: demo/test orders can&apos;t be tracked — only real purchased
-              orders appear here.
-            </p>
+            <p className="mt-4 text-xs text-charcoal/45">{t("tip")}</p>
           )}
         </div>
       )}
@@ -141,14 +139,14 @@ function TrackContent() {
           <div className="flex flex-wrap items-baseline justify-between gap-2">
             <div>
               <p className="text-xs font-bold uppercase tracking-wide text-gold">
-                Order {result.id}
+                {t("orderLabel", { id: result.id })}
               </p>
               <p className="mt-1 text-sm text-charcoal/60">
-                Placed {new Date(result.createdAt).toLocaleDateString()}
+                {t("placed", { date: new Date(result.createdAt).toLocaleDateString() })}
               </p>
             </div>
             <span className="rounded-full bg-blush px-3 py-1 text-xs font-bold uppercase tracking-wide text-plum">
-              {STATUS_LABELS[result.status]}
+              {tt(STATUS_LABELS[result.status])}
             </span>
           </div>
 
@@ -159,14 +157,14 @@ function TrackContent() {
           {result.paxi && (
             <div className="mt-6 rounded-2xl border border-plum/15 bg-white p-5 text-sm">
               <p className="text-xs font-bold uppercase tracking-wide text-gold">
-                Collect at
+                {t("collectAt")}
               </p>
               <p className="mt-1 font-semibold text-plum">
                 {result.paxi.pointName}
               </p>
               <p className="text-charcoal/60">{result.paxi.pointAddress}</p>
               <p className="mt-1 text-xs text-charcoal/45">
-                PAXI {result.paxi.service} delivery
+                {t("paxiService", { service: tp(`service.${result.paxi.service}`) })}
               </p>
             </div>
           )}
@@ -182,18 +180,18 @@ function TrackContent() {
             ))}
           </ul>
           <p className="mt-4 border-t border-blush pt-3 text-right text-sm font-semibold">
-            Total paid: <span className="text-plum">{formatZAR(result.total)}</span>
+            {t("totalPaid")} <span className="text-plum">{formatZAR(result.total)}</span>
           </p>
         </div>
       )}
 
       <p className="mt-6 text-center text-sm text-charcoal/50">
-        Already have an account?{" "}
+        {t("signInPre")}
         <Link
           href="/sign-in"
           className="font-semibold text-plum underline decoration-gold decoration-2 underline-offset-4"
         >
-          Sign in to see all your orders
+          {t("signInLink")}
         </Link>
       </p>
     </div>
@@ -201,8 +199,9 @@ function TrackContent() {
 }
 
 export default function TrackPage() {
+  const tc = translator("common");
   return (
-    <Suspense fallback={<div className="py-24 text-center text-charcoal/60">Loading…</div>}>
+    <Suspense fallback={<div className="py-24 text-center text-charcoal/60">{tc("loading")}</div>}>
       <TrackContent />
     </Suspense>
   );

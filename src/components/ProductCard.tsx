@@ -2,8 +2,10 @@ import Link from "next/link";
 import type { Product } from "@/lib/products";
 import ProductArt from "./ProductArt";
 import { formatZAR } from "@/lib/format";
+import { translator } from "@/lib/i18n";
 
 export default function ProductCard({ product }: { product: Product }) {
+  const tc = translator("common");
   const discount =
     product.compareAtPrice && product.compareAtPrice > product.price
       ? Math.round(
@@ -31,7 +33,7 @@ export default function ProductCard({ product }: { product: Product }) {
           )}
           {discount > 0 && (
             <span className="rounded-full bg-gold px-3 py-1 text-[10px] font-bold uppercase tracking-wide text-charcoal">
-              Save {discount}%
+              {tc("savePercent", { percent: discount })}
             </span>
           )}
         </div>

@@ -4,6 +4,7 @@ import "./globals.css";
 import { CartProvider } from "@/components/CartProvider";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { translator } from "@/lib/i18n";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,13 +21,14 @@ const playfairDisplay = Playfair_Display({
   subsets: ["latin"],
 });
 
+const t = translator("metadata");
+
 export const metadata: Metadata = {
   title: {
-    default: "SynHairbyG — Synthetic & Human Blend Wigs",
-    template: "%s | SynHairbyG",
+    default: t("siteTitle"),
+    template: t("titleTemplate"),
   },
-  description:
-    "Shop hand-picked synthetic and human blend wigs by SynHairbyG. Free delivery over R1,500, secure Yoco checkout, and wigs delivered across South Africa.",
+  description: t("siteDescription"),
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

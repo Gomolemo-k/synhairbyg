@@ -225,6 +225,41 @@ create table if not exists contact_messages (
   created_at timestamptz not null default now()
 );
 
+-- --- email tokens ---------------------------------------------------------
+-- One-time tokens for email verification and password reset. High-entropy raw
+-- tokens are stored; used_at becomes set once consumed (single-use).
+create table if not exists email_tokens (
+  id         uuid primary key default gen_random_uuid(),
+  token      text not null unique,
+  user_id    uuid not null references users(id) on delete cascade,
+  type       text not null check (type in ('verify', 'reset')),
+  expires_at timestamptz not null,
+  used_at    timestamptz,
+  created_at timestamptz not null default now()
+);
+create index if not exists idx_email_tokens_token on email_tokens (token);
+create index if not exists idx_email_tokens_user on email_tokens (user_id);
+
+-- --- newsletter subscribers -----------------------------------------------
+create table if not exists newsletter_subscribers (
+  id               uuid primary key default gen_random_uuid(),
+  email            text not null unique,
+  unsub_token      text not null unique,   -- high-entropy, for the unsubscribe link
+  source           text not null default 'footer',
+  subscribed_at    timestamptz not null default now(),
+  unsubscribed_at  timestamptz
+);
+create index if not exists idx_newsletter_subscribers_email on newsletter_subscribers (email);
+
+-- --- cart reminders -------------------------------------------------------
+-- One row per abandoned-cart reminder sent, so we never nag twice per window.
+create table if not exists cart_reminders (
+  id         uuid primary key default gen_random_uuid(),
+  user_id    uuid not null references users(id) on delete cascade,
+  sent_at    timestamptz not null default now()
+);
+create index if not exists idx_cart_reminders_user on cart_reminders (user_id);
+
 -- --- updated_at triggers --------------------------------------------------
 create or replace function set_updated_at()
 returns trigger as $$

@@ -1,14 +1,34 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
+import { Suspense, useEffect, useState, type FormEvent } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { translator } from "@/lib/i18n";
 
 const inputClasses =
   "mt-1 w-full rounded-xl border border-plum/20 bg-white px-4 py-3 text-sm text-charcoal outline-none transition focus:border-plum focus:ring-2 focus:ring-plum/20";
 
 export default function SignInPage() {
+  const tc = translator("common");
+  return (
+    <Suspense
+      fallback={
+        <div className="py-24 text-center">
+          <div className="mx-auto h-12 w-12 animate-pulse rounded-full bg-blush" />
+          <p className="mt-4 text-charcoal/60">{tc("loading")}</p>
+        </div>
+      }
+    >
+      <SignInContent />
+    </Suspense>
+  );
+}
+
+function SignInContent() {
+  const t = translator("auth");
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const reset = searchParams.get("reset") === "1";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -39,13 +59,13 @@ export default function SignInPage() {
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok || !data.ok) {
-        setError(data.error ?? "Something went wrong.");
+        setError(data.error ?? t("errorFallback"));
         return;
       }
       router.push("/account");
       router.refresh();
     } catch {
-      setError("Something went wrong. Please try again.");
+      setError(t("errorFallback"));
     } finally {
       setBusy(false);
     }
@@ -53,14 +73,12 @@ export default function SignInPage() {
 
   return (
     <div className="mx-auto max-w-md px-4 py-20 sm:px-6">
-      <h1 className="font-display text-4xl text-plum">Welcome back</h1>
-      <p className="mt-2 text-sm text-charcoal/60">
-        Sign in to see your orders and track your packages.
-      </p>
+      <h1 className="font-display text-4xl text-plum">{t("signInTitle")}</h1>
+      <p className="mt-2 text-sm text-charcoal/60">{t("signInSub")}</p>
 
       <form onSubmit={submit} className="mt-8 space-y-4">
         <label className="block">
-          <span className="text-sm font-semibold text-charcoal">Email</span>
+          <span className="text-sm font-semibold text-charcoal">{t("email")}</span>
           <input
             required
             type="email"
@@ -71,7 +89,15 @@ export default function SignInPage() {
           />
         </label>
         <label className="block">
-          <span className="text-sm font-semibold text-charcoal">Password</span>
+          <span className="flex items-center justify-between text-sm font-semibold text-charcoal">
+            {t("password")}
+            <Link
+              href="/forgot-password"
+              className="font-normal text-plum underline decoration-gold decoration-2 underline-offset-4"
+            >
+              {t("forgotPassword")}
+            </Link>
+          </span>
           <input
             required
             type="password"
@@ -81,6 +107,12 @@ export default function SignInPage() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </label>
+
+        {reset && (
+          <p className="rounded-xl bg-gold/10 px-4 py-3 text-sm font-medium text-charcoal">
+            {t("resetNotice")}
+          </p>
+        )}
 
         {error && (
           <p className="rounded-xl bg-plum/10 px-4 py-3 text-sm font-medium text-plum">
@@ -93,17 +125,17 @@ export default function SignInPage() {
           disabled={busy}
           className="w-full rounded-full bg-plum py-4 text-sm font-semibold text-warmwhite transition hover:bg-rose disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {busy ? "Signing in…" : "Sign in"}
+          {busy ? t("signingIn") : t("signIn")}
         </button>
       </form>
 
       <p className="mt-6 text-center text-sm text-charcoal/60">
-        New here?{" "}
+        {t("newHere")}
         <Link
           href="/sign-up"
           className="font-semibold text-plum underline decoration-gold decoration-2 underline-offset-4"
         >
-          Create an account
+          {t("createAccount")}
         </Link>
       </p>
     </div>

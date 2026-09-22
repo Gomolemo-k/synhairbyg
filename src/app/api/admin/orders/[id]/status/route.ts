@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionUser, isAdmin } from "@/lib/auth";
-import { updateOrderStatus, type OrderStatus } from "@/lib/orders";
+import { loadOrder, updateOrderStatus, type OrderStatus } from "@/lib/orders";
+import { sendOrderReadyEmail } from "@/lib/mail/templates";
 
 const ALLOWED: OrderStatus[] = [
   "paid",
@@ -40,6 +41,32 @@ export async function POST(
   );
   if (!updated) {
     return NextResponse.json({ error: "Order not found." }, { status: 404 });
+  }
+
+  // The moment an order is marked packed it's ready to be handed to PAXI —
+  // tell the customer it's on its way to their PEP store.
+  if (status === "packed") {
+    const order = await loadOrder(String(id).toUpperCase());
+    if (order) {
+      try {
+        await sendOrderReadyEmail({
+          to: order.customer.email,
+          name: order.customer.firstName,
+          orderId: order.id,
+          items: order.lines.map((l) => ({
+            name: l.name,
+            qty: l.qty,
+            price: l.price,
+          })),
+          collectionPoint: order.paxi
+            ? `${order.paxi.pointName} — ${order.paxi.pointAddress}`
+            : undefined,
+        });
+      } catch (err) {
+        // Never let an email failure roll back a successful status update.
+        console.error("Order ready email failed:", order.id, err);
+      }
+    }
   }
 
   return NextResponse.json({ ok: true, status });

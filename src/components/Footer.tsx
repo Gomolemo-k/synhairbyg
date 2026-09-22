@@ -1,22 +1,27 @@
 import Link from "next/link";
-
-const shopLinks = [
-  { href: "/shop?type=Human+Blend", label: "Human Blend Wigs" },
-  { href: "/shop?type=Synthetic", label: "Synthetic Wigs" },
-  { href: "/collections/signature-blend", label: "Signature Blend" },
-  { href: "/collections/synthetic", label: "Synthetic Edit" },
-  { href: "/collections/bridal-occasion", label: "Bridal & Occasion" },
-];
-
-const companyLinks = [
-  { href: "/about", label: "Our Story" },
-  { href: "/contact", label: "Contact Us" },
-  { href: "/policies", label: "Shipping & Delivery" },
-  { href: "/policies", label: "Returns & Refunds" },
-  { href: "/policies", label: "Privacy & Terms" },
-];
+import NewsletterForm from "./NewsletterForm";
+import { translator } from "@/lib/i18n";
 
 export default function Footer() {
+  const t = translator("footer");
+  const year = new Date().getFullYear();
+
+  const shopLinks = [
+    { href: "/shop?type=Human+Blend", label: t("linkHumanBlend") },
+    { href: "/shop?type=Synthetic", label: t("linkSynthetic") },
+    { href: "/collections/signature-blend", label: t("linkSignature") },
+    { href: "/collections/synthetic", label: t("linkSyntheticEdit") },
+    { href: "/collections/bridal-occasion", label: t("linkBridal") },
+  ];
+
+  const companyLinks = [
+    { href: "/about", label: t("linkStory") },
+    { href: "/contact", label: t("linkContact") },
+    { href: "/policies", label: t("linkShipping") },
+    { href: "/policies", label: t("linkReturns") },
+    { href: "/policies", label: t("linkPrivacy") },
+  ];
+
   return (
     <footer className="mt-20 border-t border-blush bg-plum text-warmwhite">
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
@@ -26,19 +31,14 @@ export default function Footer() {
               Syn<span className="text-gold">Hair</span>byG
             </p>
             <p className="mt-3 max-w-md text-sm leading-relaxed text-warmwhite/75">
-              Hand-picked synthetic and human blend wigs, made for the modern
-              crown. Every piece is quality-checked, packed with love, and
-              delivered across South Africa.
+              {t("tagline")}
             </p>
-            <p className="mt-5 text-sm text-warmwhite/60">
-              hello@synhairbyg.com &middot; WhatsApp +27 82 000 0000 &middot;
-              Johannesburg, South Africa
-            </p>
+            <p className="mt-5 text-sm text-warmwhite/60">{t("contact")}</p>
           </div>
 
           <div>
             <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-gold">
-              Shop
+              {t("headingShop")}
             </h3>
             <ul className="mt-4 space-y-2.5 text-sm">
               {shopLinks.map((link) => (
@@ -56,7 +56,7 @@ export default function Footer() {
 
           <div>
             <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-gold">
-              Company
+              {t("headingCompany")}
             </h3>
             <ul className="mt-4 space-y-2.5 text-sm">
               {companyLinks.map((link) => (
@@ -70,18 +70,24 @@ export default function Footer() {
                 </li>
               ))}
               <li>
-                <span className="text-warmwhite/75">Instagram @synhairbyg</span>
+                <span className="text-warmwhite/75">{t("instagram")}</span>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-warmwhite/15 pt-6 text-xs text-warmwhite/55 sm:flex-row">
-          <p>&copy; {new Date().getFullYear()} SynHairbyG. All rights reserved.</p>
+        <div className="mt-12 border-t border-warmwhite/15 pt-8">
+          <div className="max-w-md">
+            <NewsletterForm />
+          </div>
+        </div>
+
+        <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-warmwhite/15 pt-6 text-xs text-warmwhite/55 sm:flex-row">
+          <p>{t("copyright", { year })}</p>
           <p className="flex items-center gap-3">
-            <span>Secure Yoco payments</span>
+            <span>{t("securePayments")}</span>
             <span className="h-1 w-1 rounded-full bg-gold" />
-            <span>Made with love in SA</span>
+            <span>{t("madeInSA")}</span>
           </p>
         </div>
       </div>
